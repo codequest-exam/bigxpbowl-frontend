@@ -17,10 +17,10 @@ export default function Home() {
         worked up an appetite from all the excitement, our restaurant has got
         you covered. From mouthwatering burgers to crispy fries and everything
         in between, we've got the perfect fuel to keep you going strong. Ready
-        to roll? Call us now to book your lane and lock in your spot for a day
-        of non-stop fun! Our friendly staff is standing by to help you plan the
-        ultimate Big Xp experience. Don't wait – the good times are waiting for
-        you at Big Xp Bowl!
+        to roll? Call us now at +45 12 34 56 78 to book your lane and lock in
+        your spot for a day of non-stop fun! Our friendly staff is standing by
+        to help you plan the ultimate Big Xp experience. Don't wait – the good
+        times are rolling on at Big Xp Bowl!
       </p>
     </div>
   );
