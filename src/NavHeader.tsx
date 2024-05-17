@@ -7,7 +7,7 @@ export default function NavHeader() {
         <div className="navbar-items">
           <li>
             <NavLink to="/">Home</NavLink>
-            <NavLink to="/reservations">Reservations</NavLink>
+            <NavLink to="/new-reservation">New Reservation</NavLink>
           </li>
         </div>
       </ul>
