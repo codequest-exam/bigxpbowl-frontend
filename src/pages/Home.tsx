@@ -11,7 +11,7 @@ export default function Home() {
       </h2>
       <img src={bowlingAlleyImage} alt="Bowling Alley" className="home-image" />
       <p className="home-paragraph">
-        Read more about our activites <Link to="/about">here</Link> or call us
+        Read more about our activities <Link to="/about">here</Link> or call us
         at +45 12 34 56 78 to book an unforgettable experience.
       </p>
     </div>
