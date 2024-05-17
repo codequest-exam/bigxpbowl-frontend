@@ -55,7 +55,7 @@ export default function About() {
           Ready to roll? Call us now at +45 12 34 56 78 to book your lane and
           lock in your spot for a day of non-stop fun! Our friendly staff is
           standing by to help you plan the ultimate Big XP experience. Don't
-          wait – the good times are rolling on at Big XP Bowl!
+          wait – the good times are rolling at Big XP Bowl!
         </p>
       </div>
     </div>
