@@ -10,7 +10,8 @@ export default function About() {
 
         <p className="about-paragraph">
           At Big Xp Bowl, we're not just your ordinary bowling alley – we're
-          your ultimate destination for a fantastic time!
+          your ultimate destination for a fantastic time! Call us at +45 12 34
+          56 78 to book an unforgettable experience.
         </p>
       </div>
 
