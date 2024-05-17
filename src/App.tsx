@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./Layout";
 import Home from "./pages/Home";
+import About from "./pages/About";
 import ReservationForm from "./pages/ReservationForm";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
