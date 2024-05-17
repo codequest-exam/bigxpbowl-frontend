@@ -5,7 +5,7 @@ export default function About() {
   return (
     <div className="about-container">
       <div className="about-header">
-        <h2 className="about-title">About XP Bowl</h2>
+        <h2 className="about-title">About Big XP Bowl</h2>
         <img
           src={bowlingHeaderImage}
           className="about-image"
