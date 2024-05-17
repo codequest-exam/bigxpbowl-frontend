@@ -5,11 +5,15 @@ export default function About() {
   return (
     <div className="about-container">
       <div className="about-header">
-        <h2 className="about-title">Welcome to Big Xp Bowl</h2>
-        <img src={bowlingHeaderImage} alt="Bowling Alley" />
+        <h2 className="about-title">About XP Bowl</h2>
+        <img
+          src={bowlingHeaderImage}
+          className="about-image"
+          alt="Bowling Alley"
+        />
 
         <p className="about-paragraph">
-          At Big Xp Bowl, we're not just your ordinary bowling alley – we're
+          At Big XP Bowl, we're not just your ordinary bowling alley – we're
           your ultimate destination for a fantastic time! Call us at +45 12 34
           56 78 to book an unforgettable experience.
         </p>
