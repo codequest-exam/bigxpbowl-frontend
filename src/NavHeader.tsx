@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import "./navbar.css";
 
 export default function NavHeader() {
   return (
@@ -7,6 +8,7 @@ export default function NavHeader() {
         <div className="navbar-items">
           <li>
             <NavLink to="/">Home</NavLink>
+            <NavLink to="/about">About us</NavLink>
             <NavLink to="/new-reservation">New Reservation</NavLink>
           </li>
         </div>
