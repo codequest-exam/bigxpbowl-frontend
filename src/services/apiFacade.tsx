@@ -12,6 +12,13 @@ async function getReservations(): Promise<Array<Reservation>> {
   return fetch(API_URL + "/resevations").then(handleHttpErrors);
 }
 
+export async function addReservation(
+  newReservation: Reservation,
+)
+  const options = makeOptions("POST", newReservation);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+}
+
 export function makeOptions(
   method: string,
   body: object | null,

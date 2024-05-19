@@ -25,7 +25,6 @@ const Reservations: React.FC = () => {
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Access the form data using formData object
         console.log(formData);
     };
 
