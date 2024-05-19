@@ -6,5 +6,4 @@ const URL = isProduction
 
 const MODE = isProduction ? "Production" : "Development";
 console.info(MODE + " API URL: " + URL);
-// console.info("ENV", import.meta.env);
 export const API_URL = URL;

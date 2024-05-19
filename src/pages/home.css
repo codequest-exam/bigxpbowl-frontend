@@ -1,0 +1,42 @@
+.home-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.home-title {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.home-subtitle {
+  font-size: 1.5em;
+  color: #666;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.home-image {
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home-paragraph {
+  font-size: 1.2em;
+  color: #444;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+.home-paragraph a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.home-paragraph a:hover {
+  text-decoration: underline;
+}

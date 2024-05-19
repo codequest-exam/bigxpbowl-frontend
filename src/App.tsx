@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./Layout";
 import Home from "./pages/Home";
-import Reservations from "./pages/Reservations";
+import About from "./pages/About";
+import ReservationForm from "./pages/ReservationForm";
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/reservations" element={<Reservations/>} />
+          <Route path="/about" element={<About />} />
+          <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Layout>
