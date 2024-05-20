@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import ReservationForm from "./pages/ReservationForm";
+import Reservations from "./pages/Reservations";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/new-reservation" element={<ReservationForm />} />
+          <Route path="/reservations" element={<Reservations/>} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Layout>

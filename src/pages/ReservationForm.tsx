@@ -1,42 +1,74 @@
 import React, { useState } from "react";
 
-const ReservationForm: React.FC = () => {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [numParticipants, setNumParticipants] = useState(0);
-  const [activity, setActivity] = useState("");
-  const [date, setDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [duration, setDuration] = useState("");
-  const [chosenActivities, setChosenActivities] = useState<string[]>([]);
+interface ReservationFormData {
+  name: string;
+  phoneNumber: string;
+  numParticipants: number;
+  activity: string;
+  date: string;
+  startTime: string;
+  duration: string;
+  chosenActivities: string[];
+}
+
+const Reservations: React.FC = () => {
+  const [formData, setFormData] = useState<ReservationFormData>({
+    name: "",
+    phoneNumber: "",
+    numParticipants: 0,
+    activity: "",
+    date: "",
+    startTime: "",
+    duration: "",
+    chosenActivities: [],
+  });
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
+    console.log(formData);
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleAddActivity = () => {
-    if (activity) {
-      setChosenActivities([...chosenActivities, activity]);
-      setActivity("");
+    if (formData.activity) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        chosenActivities: [
+          ...prevFormData.chosenActivities,
+          prevFormData.activity,
+        ],
+        activity: "",
+      }));
     }
   };
 
   const handleRemoveActivity = (chosenActivity: string) => {
-    const updatedActivities = chosenActivities.filter(
-      (activity) => activity !== chosenActivity
-    );
-    setChosenActivities(updatedActivities);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      chosenActivities: prevFormData.chosenActivities.filter(
+        (activity) => activity !== chosenActivity
+      ),
+    }));
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form className="reservation-form" onSubmit={handleFormSubmit}>
       <label>
         Name:
         <input
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
         />
       </label>
       <br />
@@ -44,8 +76,9 @@ const ReservationForm: React.FC = () => {
         Phone Number:
         <input
           type="text"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          name="phoneNumber"
+          value={formData.phoneNumber}
+          onChange={handleInputChange}
         />
       </label>
       <br />
@@ -53,14 +86,19 @@ const ReservationForm: React.FC = () => {
         Number of Participants:
         <input
           type="number"
-          value={numParticipants}
-          onChange={(e) => setNumParticipants(Number(e.target.value))}
+          name="numParticipants"
+          value={formData.numParticipants}
+          onChange={handleInputChange}
         />
       </label>
       <br />
       <label>
         Activity:
-        <select value={activity} onChange={(e) => setActivity(e.target.value)}>
+        <select
+          name="activity"
+          value={formData.activity}
+          onChange={handleInputChange}
+        >
           <option value="">Select an activity</option>
           <option value="bowling">Bowling</option>
           <option value="airhockey">Air Hockey</option>
@@ -75,8 +113,9 @@ const ReservationForm: React.FC = () => {
         Date:
         <input
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          name="date"
+          value={formData.date}
+          onChange={handleInputChange}
         />
       </label>
       <br />
@@ -84,14 +123,19 @@ const ReservationForm: React.FC = () => {
         Start Time:
         <input
           type="time"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
+          name="startTime"
+          value={formData.startTime}
+          onChange={handleInputChange}
         />
       </label>
       <br />
       <label>
         Duration:
-        <select value={duration} onChange={(e) => setDuration(e.target.value)}>
+        <select
+          name="duration"
+          value={formData.duration}
+          onChange={handleInputChange}
+        >
           <option value="">Select duration</option>
           <option value="1hr">1 hour</option>
           <option value="2hr">2 hours</option>
@@ -102,7 +146,7 @@ const ReservationForm: React.FC = () => {
       <br />
       <h3>Chosen Activities:</h3>
       <ul>
-        {chosenActivities.map((chosenActivity) => (
+        {formData.chosenActivities.map((chosenActivity) => (
           <li key={chosenActivity}>
             {chosenActivity}
             <button
@@ -118,4 +162,4 @@ const ReservationForm: React.FC = () => {
   );
 };
 
-export default ReservationForm;
+export default Reservations;
