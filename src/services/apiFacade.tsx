@@ -9,14 +9,14 @@ export interface Reservation {
 const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<Reservation>> {
-  return fetch(API_URL + "/resevations").then(handleHttpErrors);
+  return fetch(API_URL + "/reservation").then(handleHttpErrors);
 }
 
 export async function addReservation(
   newReservation: Reservation,
 ) {
   const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+  return await fetch(API_URL + "/reservation", options).then(handleHttpErrors);
 }
 
 export function makeOptions(
