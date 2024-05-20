@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import "./reservations.css";
 import { getReservations } from "../services/apiFacade";
 
 interface Reservation {
@@ -35,9 +35,9 @@ const Reservations: React.FC = () => {
   // };
 
   return (
-    <div>
-      <h1>Reservations</h1>
-      <table>
+    <div className="reservations-page">
+      <h1 className="reservations-header">Reservations</h1>
+      <table className="reservations-table">
         <thead>
           <tr>
             <th>ID</th>
