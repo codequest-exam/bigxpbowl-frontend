@@ -6,7 +6,7 @@ export interface Reservation {
     activities: Array<string>;
 }
 
-const API_URL = "http://localhost:8080/";
+const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<Reservation>> {
   return fetch(API_URL + "/resevations").then(handleHttpErrors);
@@ -14,7 +14,7 @@ async function getReservations(): Promise<Array<Reservation>> {
 
 export async function addReservation(
   newReservation: Reservation,
-)
+) {
   const options = makeOptions("POST", newReservation);
   return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }

@@ -1,122 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getReservations } from '../services/apiFacade';
 
-interface ReservationFormData {
-    name: string;
-    phoneNumber: string;
-    numParticipants: number;
-    activity: string;
-    date: string;
-    startTime: string;
-    duration: string;
-    chosenActivities: string[];
+interface Reservation {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  numParticipants: number;
+  activity: string;
+  date: string;
+  startTime: string;
+  duration: string;
+  chosenActivities: string[];
 }
 
 const Reservations: React.FC = () => {
-    const [formData, setFormData] = useState<ReservationFormData>({
-        name: '',
-        phoneNumber: '',
-        numParticipants: 0,
-        activity: '',
-        date: '',
-        startTime: '',
-        duration: '',
-        chosenActivities: [],
-    });
+    const [reservations, setReservations] = useState<Reservation[]>([]);
 
-    const handleFormSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(formData);
-    };
+    useEffect(() => {
+        const fetchReservations = async () => {
+            const reservationsList = await getReservations();
+            setReservations(reservationsList);
+        };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
+        fetchReservations();
+    }, []);
 
-    const handleAddActivity = () => {
-        if (formData.activity) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                chosenActivities: [...prevFormData.chosenActivities, prevFormData.activity],
-                activity: '',
-            }));
-        }
-    };
+    // const handleEdit = (id: number) => {
+    //     // Handle edit logic here
+    // };
 
-    const handleRemoveActivity = (chosenActivity: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            chosenActivities: prevFormData.chosenActivities.filter((activity) => activity !== chosenActivity),
-        }));
-    };
+    // const handleDelete = (id: number) => {
+    //     // Handle delete logic here
+    // };
 
     return (
-        <form className="reservation-form" onSubmit={handleFormSubmit}>
-            <label>
-                Name:
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Phone Number:
-                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Number of Participants:
-                <input
-                    type="number"
-                    name="numParticipants"
-                    value={formData.numParticipants}
-                    onChange={handleInputChange}
-                />
-            </label>
-            <br />
-            <label>
-                Activity:
-                <select name="activity" value={formData.activity} onChange={handleInputChange}>
-                    <option value="">Select an activity</option>
-                    <option value="bowling">Bowling</option>
-                    <option value="airhockey">Air Hockey</option>
-                    <option value="dining">Dining</option>
-                </select>
-                <button type="button" onClick={handleAddActivity}>Add</button>
-            </label>
-            <br />
-            <label>
-                Date:
-                <input type="date" name="date" value={formData.date} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Start Time:
-                <input type="time" name="startTime" value={formData.startTime} onChange={handleInputChange} />
-            </label>
-            <br />
-            <label>
-                Duration:
-                <select name="duration" value={formData.duration} onChange={handleInputChange}>
-                    <option value="">Select duration</option>
-                    <option value="1hr">1 hour</option>
-                    <option value="2hr">2 hours</option>
-                </select>
-            </label>
-            <br />
-            <button type="submit">Submit</button>
-            <br />
-            <h3>Chosen Activities:</h3>
-            <ul>
-                {formData.chosenActivities.map((chosenActivity) => (
-                    <li key={chosenActivity}>
-                        {chosenActivity}
-                        <button type="button" onClick={() => handleRemoveActivity(chosenActivity)}>Remove</button>
-                    </li>
-                ))}
-            </ul>
-        </form>
+        <div>
+            <h1>Reservations</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Start Time</th>
+                        <th>Activity</th>
+                        <th>Number of Participants</th>
+                        <th>Phone Number</th>
+                        <th>Chosen Activities</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {reservations.map((reservation) => (
+                        <tr key={reservation.id}>
+                            <td>{reservation.id}</td>
+                            <td>{reservation.name}</td>
+                            <td>{reservation.date}</td>
+                            <td>{reservation.duration}</td>
+                            <td>{reservation.startTime}</td>
+                            <td>{reservation.activity}</td>
+                            <td>{reservation.numParticipants}</td>
+                            <td>{reservation.phoneNumber}</td>
+                            <td>{reservation.chosenActivities}</td>
+                            <td>
+                                {/* <button onClick={() => handleEdit(reservation.id)}>Edit</button>
+                                <button onClick={() => handleDelete(reservation.id)}>Delete</button> */}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 

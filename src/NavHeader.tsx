@@ -10,6 +10,7 @@ export default function NavHeader() {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About us</NavLink>
             <NavLink to="/new-reservation">New Reservation</NavLink>
+            <NavLink to="/reservations">Reservations</NavLink>
           </li>
         </div>
       </ul>
