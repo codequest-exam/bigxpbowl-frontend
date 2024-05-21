@@ -80,6 +80,7 @@
 }
 
 .chosen-activities {
+  color: #333;
   max-width: 300px;
   width: 100%;
   padding: 20px;
@@ -89,7 +90,7 @@
 
 .chosen-activities h3 {
   font-size: 1.5em;
-  color: #333;
+  
   margin-bottom: 10px;
 }
 
@@ -99,6 +100,7 @@
 }
 
 .chosen-activities ul li {
+  color: black;
   padding: 8px 0;
   display: flex;
   justify-content: space-between;
@@ -117,4 +119,10 @@
 
 .chosen-activities ul li button:hover {
   background-color: #c82333;
+}
+
+.error-message{
+  color: red;
+  
+  margin-top: 5px;
 }

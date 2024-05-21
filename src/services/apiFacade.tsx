@@ -1,14 +1,9 @@
-export interface Reservation {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  participants: number;
-    activities: Array<string>;
-}
+
+import { Reservation, ReservationListItem } from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
-async function getReservations(): Promise<Array<Reservation>> {
+async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservation").then(handleHttpErrors);
 }
 
