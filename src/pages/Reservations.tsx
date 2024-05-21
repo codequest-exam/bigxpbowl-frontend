@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./reservations.css";
-import { getReservations } from "../services/apiFacade";
+import { getReservations, deleteReservation } from "../services/apiFacade";
+
 
 interface Reservation {
   id: number;
@@ -26,13 +27,18 @@ const Reservations: React.FC = () => {
     fetchReservations();
   }, []);
 
-  // const handleEdit = (id: number) => {
-  //     // Handle edit logic here
-  // };
+//   const handleEdit = (id: number) => {
+      
+//   };
 
-  // const handleDelete = (id: number) => {
-  //     // Handle delete logic here
-  // };
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteReservation(id);
+      setReservations(await getReservations());
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="reservations-page">
@@ -64,8 +70,8 @@ const Reservations: React.FC = () => {
               <td>{reservation.phoneNumber}</td>
               <td>{reservation.chosenActivities}</td>
               <td>
-                {/* <button onClick={() => handleEdit(reservation.id)}>Edit</button>
-                                <button onClick={() => handleDelete(reservation.id)}>Delete</button> */}
+                <button onClick={() => handleEdit(reservation.id)}>Edit</button>
+                <button onClick={() => handleDelete(reservation.id)}>Delete</button>
               </td>
             </tr>
           ))}

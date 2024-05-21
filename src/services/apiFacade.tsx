@@ -19,6 +19,12 @@ export async function addReservation(
   return await fetch(API_URL + "/reservation", options).then(handleHttpErrors);
 }
 
+export async function deleteReservation(id: number) {
+  const options = makeOptions("DELETE", null);
+  const response =  await fetch(API_URL + "/reservation/" + id, options).then(handleHttpErrors);
+  return response.status
+}
+
 export function makeOptions(
   method: string,
   body: object | null,
