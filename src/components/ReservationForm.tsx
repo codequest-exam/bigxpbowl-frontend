@@ -15,7 +15,8 @@ interface ReservationFormData {
 }
 
 
-function Reservations({ existingReservation }: { existingReservation?: Reservation }) {
+
+export default function ReservationForm({ existingReservation }: { existingReservation?: Reservation }) {
   const [formData, setFormData] = useState<ReservationFormData>(
     existingReservation
       ? {
@@ -192,5 +193,3 @@ function Reservations({ existingReservation }: { existingReservation?: Reservati
     </div>
   );
 }
-
-export default Reservations;

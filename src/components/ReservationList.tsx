@@ -1,59 +1,77 @@
 import { useEffect, useState } from "react";
-import { getReservations } from "../services/apiFacade";
-import { Reservation as APIReservation } from "../services/apiFacade";
 import "./reservations.css";
+import { getReservations } from "../services/apiFacade";
+import { ReservationListItem } from "../interfaces/reservationInterface";
 
-interface Props {
-  searchTerm: string;
-}
-
-const ReservationList: React.FC<Props> = () => {
-  const [reservations, setReservations] = useState<Array<APIReservation>>([]);
-  const [error, setError] = useState("");
+function ReservationList() {
+  const [reservations, setReservations] = useState<ReservationListItem[]>([]);
 
   useEffect(() => {
-    getReservations()
-      .then((res) => {
-        setReservations(res);
-      })
-      .catch(() => setError("Error getting reservations. Please try again."));
+    const fetchReservations = async () => {
+      const reservationsList = await getReservations();
+      console.log(reservationsList);
+
+      setReservations(reservationsList);
+    };
+
+    fetchReservations();
   }, []);
 
-  if (error) {
-    return <h2 style={{ color: "red" }}>{error}</h2>;
-  }
+  const handleEdit = (id: number) => {
+    console.log("Edit reservation with id: ", id);
+
+    // Handle edit logic here
+  };
+
+  const handleDelete = (id: number) => {
+    console.log("Delete reservation with id: ", id);
+
+    // Handle delete logic here
+  };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name: </th>
-          <th>Phone Number: </th>
-          <th>Number of participants: </th>
-          <th>Activities booked: </th>
-        </tr>
-      </thead>
-      <tbody>
-        {reservations.map((reservation) => {
-
-          return (
+    <div className="reservations-page">
+      <h1 className="reservations-header">Reservations</h1>
+      <table className="reservations-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Number of Participants</th>
+            <th>Date</th>
+            <th>Chosen Activities</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation) => (
             <tr key={reservation.id}>
-              <td className="center-text">{reservation.id}</td>
+              <td>{reservation.id}</td>
               <td>{reservation.name}</td>
+              <td>{reservation.participants}</td>
+              <td>{reservation.phoneNumber}</td>
+              {/* <td>{reservation.activities}</td>
+                    <td>{reservation.date}</td> */}
+              {/* <td>{reservation.duration}</td>
+                    <td>{reservation.startTime}</td>
+                    <td>{reservation.activity}</td>
+      
+                    <td>{reservation.chosenActivities}</td> */}
               <td>
-                {reservation.phoneNumber}
+                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
+                  Edit
+                </button>
+                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                  Delete
+                </button>
               </td>
-              <td>
-                {reservation.participants}
-              </td>
-              <td>{reservation.activities}</td>
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
-};
+}
 
 export default ReservationList;
