@@ -3,26 +3,21 @@ export interface Reservation {
   name: string;
   phoneNumber: string;
   participants: number;
-    activities: Array<string>;
+  activities: Array<string>;
 }
 
 const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<Reservation>> {
-  return fetch(API_URL + "/reservation").then(handleHttpErrors);
+  return fetch(API_URL + "/reservations").then(handleHttpErrors);
 }
 
-export async function addReservation(
-  newReservation: Reservation,
-) {
+export async function addReservation(newReservation: Reservation) {
   const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservation", options).then(handleHttpErrors);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }
 
-export function makeOptions(
-  method: string,
-  body: object | null,
-): RequestInit {
+export function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
     method: method,
     headers: {
@@ -37,16 +32,15 @@ export function makeOptions(
 }
 
 export async function handleHttpErrors(res: Response) {
-    if (!res.ok) {
-        const fullError = await res.json();
-        throw { status: res.status, fullError };
-    }
+  if (!res.ok) {
+    const fullError = await res.json();
+    throw { status: res.status, fullError };
+  }
   if (res.status === 204) {
     return {};
   }
 
   return res.json();
 }
-
 
 export { getReservations };
