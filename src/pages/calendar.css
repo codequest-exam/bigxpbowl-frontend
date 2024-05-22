@@ -1,0 +1,40 @@
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 75px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.calendar-header {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.calendar-table {
+  width: 100%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.calendar-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.calendar-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.calendar-table tbody tr:hover {
+  background-color: #f1f1f1;
+}

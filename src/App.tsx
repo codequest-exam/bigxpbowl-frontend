@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import ReservationForm from "./pages/ReservationForm";
 import Reservations from "./pages/Reservations";
+import Calendar from "./pages/Calendar";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/new-reservation" element={<ReservationForm />} />
-          <Route path="/reservations" element={<Reservations/>} />
+          <Route path="/reservations" element={<Reservations />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Layout>
