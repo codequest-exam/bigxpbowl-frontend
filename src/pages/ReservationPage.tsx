@@ -1,15 +1,41 @@
-import React, { useState } from "react";
-import { Reservation } from "../interfaces/reservationInterface";
+import  { useState } from "react";
+import {  ReservationFormData, ChosenActivityWithStringDates } from "../interfaces/reservationInterface";
 import ReservationForm from "../components/ReservationForm";
 import ReservationList from "../components/ReservationList";
 
+
+
+
+const defaultObj = {
+  id: 0,
+  name: "buster",
+  phoneNumber: "",
+  participants: 0,
+  date: "",
+  activityType: "",
+  startTime: "",
+  duration: "",
+  activities: Array<ChosenActivityWithStringDates>(),
+};
+
 export default function ReservationPage() {
-  const [reservation, setReservation] = useState<Reservation | undefined>();
+  // const [reservationToUpdate, setReservationToUpdate] = useState<ReservationWithStringDates | undefined>();
+  const [formData, setFormData] = useState<ReservationFormData>(defaultObj);
+  
 
   return (
-    <div>
-      <ReservationForm existingReservation={reservation} />
-      <ReservationList onEdit={setReservation} />
+    <div style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw" }}>
+      <div>
+        <ReservationForm
+          // existingReservation={reservationToUpdate}
+          setFormData={setFormData}
+          formData={formData}
+          // setFormData={setFormData}
+        />
+      </div>
+      <div>
+        <ReservationList setFormData={setFormData} />
+      </div>
     </div>
   );
 }

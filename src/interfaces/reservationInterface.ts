@@ -10,28 +10,56 @@
 //     chosenActivities: string[];
 //   }
 
+export interface Reservation {
+  id?: number;
+  name: string;
+  phoneNumber: string;
+  participants: number;
+  activities: Array<ChosenActivity>;
+}
 
-  export interface Reservation {
-    id?: number;
-    name: string;
-    phoneNumber: string;
-    participants: number;
-    activities: Array<ChosenActivity>;
-  }
-
-  
 export interface ChosenActivity {
-    activity: string;
-    date: Date;
-    startTime: Date;
-    endTime: Date;
-  }
+  id?: number;
+  activityType: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+}
 
 export interface ReservationListItem {
-    id: number;
-    name: string;
-    phoneNumber: string;
-    participants: number;
-    activities: string;
-    date: string;
+  id: number;
+  name: string;
+  phoneNumber: string;
+  participants: number;
+  activities: string[];
+  date: string;
+}
+
+export interface ReservationWithStringDates {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  participants: number;
+  activities: Array<ChosenActivityWithStringDates>;
+}
+
+export interface ChosenActivityWithStringDates {
+  id: number;
+  amountBooked: number;
+  activityType: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface ReservationFormData {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  participants: number;
+  activityType: string;
+  date: string;
+  startTime: string;
+  duration: string;
+  activities: Array<ChosenActivityWithStringDates>;
 }

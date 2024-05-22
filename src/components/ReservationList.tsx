@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import "./reservations.css";
-import { getReservations } from "../services/apiFacade";
-import { ReservationListItem } from "../interfaces/reservationInterface";
+import "../styling/reservations.css";
+import { getReservations, getSingleReservation } from "../services/apiFacade";
+import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 
-function ReservationList() {
+function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
   const [reservations, setReservations] = useState<ReservationListItem[]>([]);
 
   useEffect(() => {
@@ -17,10 +17,26 @@ function ReservationList() {
     fetchReservations();
   }, []);
 
-  const handleEdit = (id: number) => {
+  const handleEdit = async (id: number) => {
     console.log("Edit reservation with id: ", id);
 
     // Handle edit logic here
+
+    const reservation = await getSingleReservation(id);
+    console.log(reservation);
+
+    setFormData({
+      id: reservation.id,
+      name: reservation.name,
+      phoneNumber: reservation.phoneNumber,
+      participants: reservation.participants,
+      activities: reservation.activities,
+      date: reservation.activities[0].date,
+      startTime: "",
+      duration: "",
+      activityType: "",
+    });
+    // onEdit(reservation);
   };
 
   const handleDelete = (id: number) => {
@@ -51,13 +67,12 @@ function ReservationList() {
               <td>{reservation.name}</td>
               <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
-              {/* <td>{reservation.activities}</td>
-                    <td>{reservation.date}</td> */}
-              {/* <td>{reservation.duration}</td>
-                    <td>{reservation.startTime}</td>
-                    <td>{reservation.activity}</td>
-      
-                    <td>{reservation.chosenActivities}</td> */}
+              <td>{reservation.date}</td>
+              <td>
+                {reservation.activities.map((activity) => {
+                  return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
+                })}
+              </td>
               <td>
                 <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
                   Edit

@@ -1,45 +1,49 @@
 import React, { useState } from "react";
-import "./reservationform.css";
-import { ChosenActivity } from "../interfaces/reservationInterface";
-import { Reservation } from "../interfaces/reservationInterface";
+import "../styling/reservationform.css";
+import {  ChosenActivityWithStringDates, ReservationFormData } from "../interfaces/reservationInterface";
+// import { Reservation, ReservationWithStringDates } from "../interfaces/reservationInterface";
 
-interface ReservationFormData {
-  name: string;
-  phoneNumber: string;
-  numParticipants: number;
-  activity: string;
-  date: string;
-  startTime: string;
-  duration: string;
-  chosenActivities: ChosenActivity[];
-}
+export default function ReservationForm({
+  // existingReservation = defaultObj,
+  setFormData,
+  formData,
+}: {
+  // existingReservation?: ReservationWithStringDates;
+  setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
+  formData: ReservationFormData;
+}) {
+  // const initialReservation =
+  //   // {
+  //   //   name: "buster",
+  //   //   phoneNumber: "234234",
+  //   //   numParticipants: 1,
+  //   //   activity: "",
+  //   //   date: "",
+  //   //   startTime: "",
+  //   //   duration: "",
+  //   //   activities: [],
+  //   // };
+  //   existingReservation
+  //     ? {
+  //         name: existingReservation.name,
+  //         phoneNumber: existingReservation.phoneNumber,
+  //         numParticipants: existingReservation.participants,
+  //         date: existingReservation.activities[0].date,
+  //         // date: existingReservation.activities[0].date.toISOString().split("T")[0],
+  //         activities: existingReservation.activities,
+  //       }
+  //     : {
+  //         name: "buster",
+  //         phoneNumber: "",
+  //         numParticipants: 0,
+  //         activity: "",
+  //         date: "",
+  //         startTime: "",
+  //         duration: "",
+  //         activities: [],
+  //       };
 
-
-
-export default function ReservationForm({ existingReservation }: { existingReservation?: Reservation }) {
-  const [formData, setFormData] = useState<ReservationFormData>(
-    existingReservation
-      ? {
-          name: existingReservation.name,
-          phoneNumber: existingReservation.phoneNumber,
-          numParticipants: existingReservation.participants,
-          activity: "",
-          date: existingReservation.activities[0].date.toISOString().split("T")[0],
-          startTime: "",
-          duration: "",
-          chosenActivities: existingReservation.activities,
-        }
-      : {
-          name: "",
-          phoneNumber: "",
-          numParticipants: 0,
-          activity: "",
-          date: "",
-          startTime: "",
-          duration: "",
-          chosenActivities: [],
-        }
-  );
+  // const [reservationToSubmit, setReservationToSubmit] = useState<Reservation | undefined>();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -49,8 +53,8 @@ export default function ReservationForm({ existingReservation }: { existingReser
     const newReservation = {
       name: formData.name,
       phoneNumber: formData.phoneNumber,
-      participants: +formData.numParticipants,
-      activities: formData.chosenActivities.map(activity => ({ ...activity, activity: activity.activity.toUpperCase })),
+      participants: +formData.participants,
+      activities: formData.activities.map((activity) => ({ ...activity, activity: activity.activityType.toUpperCase() })),
       //activities: formData.chosenActivities.forEach(element => element.activity.toUpperCase()),
     };
 
@@ -61,7 +65,7 @@ export default function ReservationForm({ existingReservation }: { existingReser
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
@@ -69,17 +73,15 @@ export default function ReservationForm({ existingReservation }: { existingReser
 
   const handleAddActivity = () => {
     const checks: { [key: string]: boolean } = {
-      activity: formData.activity !== "",
+      activity: formData.activityType !== "",
       startTime: formData.startTime !== "",
       duration: formData.duration !== "",
       date: formData.date !== "",
     };
 
-    if (formData.chosenActivities.filter(activity => activity.activity === formData.activity).length !== 0) {
+    if (formData.activities.filter((activity) => activity.activityType === formData.activityType).length !== 0) {
       setErrorMessage("Activity already added");
-    }
-    else if (checks.activity && checks.startTime && checks.duration && checks.date
-    ) {
+    } else if (checks.activity && checks.startTime && checks.duration && checks.date) {
       console.log(formData.startTime);
 
       const stringToDate = new Date(formData.date);
@@ -90,12 +92,12 @@ export default function ReservationForm({ existingReservation }: { existingReser
       stringToDate.setMinutes(parseInt(formData.startTime.split(":")[1]));
       console.log(stringToDate);
 
-      setFormData(prevFormData => ({
+      setFormData((prevFormData) => ({
         ...prevFormData,
         chosenActivities: [
-          ...prevFormData.chosenActivities,
+          ...prevFormData.activities,
           {
-            activity: formData.activity,
+            activity: formData.activityType,
             startTime: startTime,
             endTime: endTime,
             date: stringToDate,
@@ -110,16 +112,16 @@ export default function ReservationForm({ existingReservation }: { existingReser
       setErrorMessage(
         "Please fill out " +
           Object.keys(checks)
-            .filter(key => !checks[key])
+            .filter((key) => !checks[key])
             .join(" & ")
       );
     }
   };
 
-  const handleRemoveActivity = (chosenActivity: ChosenActivity) => {
-    setFormData(prevFormData => ({
+  const handleRemoveActivity = (chosenActivity: ChosenActivityWithStringDates) => {
+    setFormData((prevFormData) => ({
       ...prevFormData,
-      chosenActivities: prevFormData.chosenActivities.filter(activity => activity.activity !== chosenActivity.activity),
+      activities: prevFormData.activities.filter((activity) => activity.activityType !== chosenActivity.activityType),
     }));
   };
 
@@ -138,7 +140,7 @@ export default function ReservationForm({ existingReservation }: { existingReser
           </label>
           <label>
             Number of Participants:
-            <input type="number" name="numParticipants" value={formData.numParticipants} onChange={handleInputChange} />
+            <input type="number" name="numParticipants" value={formData.participants} onChange={handleInputChange} />
           </label>
           <label>
             Date:
@@ -146,7 +148,7 @@ export default function ReservationForm({ existingReservation }: { existingReser
           </label>
           <label>
             Activity:
-            <select name="activity" value={formData.activity} onChange={handleInputChange}>
+            <select name="activityType" value={formData.activityType} onChange={handleInputChange}>
               <option value="">Select an activity</option>
               <option value="Bowling">Bowling</option>
               <option value="Airhockey">Air Hockey</option>
@@ -176,9 +178,9 @@ export default function ReservationForm({ existingReservation }: { existingReser
           <h4 className="error-message">{errorMessage && <p>{errorMessage}</p>}</h4>
 
           <ul>
-            {formData.chosenActivities.map(chosenActivity => (
-              <div key={chosenActivity.activity}>
-                <li>Activity: {chosenActivity.activity}</li>
+            {formData.activities.map((chosenActivity) => (
+              <div key={chosenActivity.activityType}>
+                <li>Activity: {chosenActivity.activityType}</li>
                 {/* <li>Start time: {chosenActivity.startTime.getHours()}</li>
                 <li>End time: {chosenActivity.endTime.getHours()}</li> */}
 

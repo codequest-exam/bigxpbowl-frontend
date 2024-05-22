@@ -1,4 +1,4 @@
-import "./about.css";
+import "../styling/about.css"
 import bowlingHeaderImage from "../assets/bowling.jpg"; // Add a header image
 
 export default function About() {
