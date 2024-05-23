@@ -41,6 +41,8 @@ export interface ReservationWithStringDates {
   phoneNumber: string;
   participants: number;
   activities: Array<ChosenActivityWithStringDates>;
+  
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }
 
 export interface ChosenActivityWithStringDates {
@@ -63,4 +65,6 @@ export interface ReservationFormData {
   startTime: string;
   duration: string;
   activities: Array<ChosenActivityWithStringDates>;
+
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }

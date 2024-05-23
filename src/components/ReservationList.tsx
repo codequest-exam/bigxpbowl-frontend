@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import "../styling/reservations.css";
 import { getReservations, getSingleReservation } from "../services/apiFacade";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 
-function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
-  const [reservations, setReservations] = useState<ReservationListItem[]>([]);
+function ReservationList({ setFormData, reservations, setReservations }: 
+  { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>}) {
+  
 
-  useEffect(() => {
-    const fetchReservations = async () => {
-      const reservationsList = await getReservations();
-      console.log(reservationsList);
+      useEffect(() => {
+        const fetchReservations = async () => {
+          const reservationsList = await getReservations();
+          console.log(reservationsList);
 
-      setReservations(reservationsList);
-    };
+          setReservations(reservationsList);
+        };
 
-    fetchReservations();
-  }, []);
+        fetchReservations();
+      }, []);
+
+  
 
   const handleEdit = async (id: number) => {
     console.log("Edit reservation with id: ", id);
@@ -25,18 +28,19 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     const reservation = await getSingleReservation(id);
     console.log("single reservation", reservation);
 
-    setFormData({
+    setFormData(() => ({
+      // ... prev,
       id: reservation.id,
       name: reservation.name,
       phoneNumber: reservation.phoneNumber,
       participants: reservation.participants,
       activities: reservation.activities,
-      date: reservation.activities[0].date,
-      startTime: "",
+      date: reservation.activities.length > 0 ? reservation.activities[0].date : "",
       duration: "",
+      startTime: "",
       activityType: "",
       amount: 1,
-    });
+    }));
     // onEdit(reservation);
   };
 

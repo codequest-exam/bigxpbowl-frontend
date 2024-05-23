@@ -1,4 +1,4 @@
-import { Reservation, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
+import {  ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
@@ -19,9 +19,10 @@ async function getSingleReservation(id: number): Promise<ReservationWithStringDa
   // console.log(reservation);
 }
 
-async function addReservation(newReservation: Reservation) {
-  const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+async function submitReservation(newReservation: ReservationWithStringDates) {
+  const URL = newReservation.id ? API_URL + "/reservations/" + newReservation.id : API_URL + "/reservations";
+  const options = makeOptions(newReservation.id ? "PUT" : "POST", newReservation);
+  return await fetch(URL, options).then(handleHttpErrors);
 }
 
 function makeOptions(method: string, body: object | null): RequestInit {
@@ -61,4 +62,4 @@ async function handleHttpErrors(res: Response) {
 //   });
 // }
 
-export { getReservations, getSingleReservation, addReservation };
+export { getReservations, getSingleReservation, submitReservation};
