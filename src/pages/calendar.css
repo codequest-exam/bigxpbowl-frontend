@@ -62,7 +62,7 @@ body,
   padding: 10px 20px;
   margin: 20px 10px;
   color: #fff;
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -96,6 +96,8 @@ body,
   box-shadow: none;
 }
 
+/* Borders */
+
 tbody,
 th {
   border: 1px solid #000;
@@ -110,8 +112,9 @@ th {
   border-right: 1px solid #ddd;
 }
 
+/* Title font size */
+
 .calendar-activity-title {
-  display: grid;
   font-size: 2em;
   margin: 0;
 }
