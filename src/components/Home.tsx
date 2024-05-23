@@ -1,4 +1,4 @@
-import "./home.css";
+import "../styling/home.css";
 import bowlingAlleyImage from "../assets/bowling.jpg";
 import { Link } from "react-router-dom";
 

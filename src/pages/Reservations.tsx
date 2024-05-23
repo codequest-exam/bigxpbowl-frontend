@@ -35,6 +35,8 @@ const Reservations: React.FC = () => {
     try {
       await deleteReservation(id);
       setReservations(await getReservations());
+      console.log("Reservation deleted");
+      
     } catch (error) {
       console.error(error);
     }
