@@ -111,6 +111,7 @@ export default function Calendar() {
       ).getTime();
       const slotTime = new Date(`1970-01-01T${timeSlot}`).getTime();
       return (
+        //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
         reservation.activities.includes(activity) &&
         reservationDate === formattedDate &&
         slotTime >= reservationStartTime &&
