@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import "../styling/reservations.css";
 import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
-import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
+import {
+  ReservationListItem,
+  ReservationFormData,
+} from "../interfaces/reservationInterface";
 
-function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
+function ReservationList({
+  setFormData,
+}: {
+  setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
+}) {
   const [reservations, setReservations] = useState<ReservationListItem[]>([]);
 
   useEffect(() => {
@@ -75,14 +82,27 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
               <td>{reservation.date}</td>
               <td>
                 {reservation.activities.map((activity) => {
-                  return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
+                  return (
+                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
+                    activity.substring(0, 1) +
+                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
+
+                    activity.substring(1).toLocaleLowerCase() +
+                    "\n"
+                  );
                 })}
               </td>
               <td>
-                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(reservation.id)}
+                >
                   Edit
                 </button>
-                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(reservation.id)}
+                >
                   Delete
                 </button>
               </td>

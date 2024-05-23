@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import { getReservations } from "../services/apiFacade";
+import { Reservation } from "../interfaces/reservationInterface";
 import "./calendar.css";
-
-interface Reservation {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  participants: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  activities: Array<string>;
-}
 
 interface Week {
   weekNumber: number;
@@ -84,8 +74,8 @@ export default function Calendar() {
         `1970-01-01T${reservation.endTime}`
       ).getTime();
       const slotTime = new Date(`1970-01-01T${timeSlot}`).getTime();
-
       return (
+        //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
         reservation.activities.includes(activity) &&
         reservationDate === formattedDate &&
         slotTime >= reservationStartTime &&
