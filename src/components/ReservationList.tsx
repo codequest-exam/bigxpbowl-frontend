@@ -15,6 +15,14 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     };
 
     fetchReservations();
+    const fetchReservations = async () => {
+      const reservationsList = await getReservations();
+      console.log(reservationsList);
+
+      setReservations(reservationsList);
+    };
+
+    fetchReservations();
   }, []);
 
   const handleEdit = async (id: number) => {
@@ -67,9 +75,29 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
         </thead>
         <tbody>
           {reservations.map((reservation) => (
+    <div className="reservations-page">
+      <h1 className="reservations-header">Reservations</h1>
+      <table className="reservations-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Number of Participants</th>
+            <th>Date</th>
+            <th>Chosen Activities</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation) => (
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
+              <td>{reservation.id}</td>
               <td>{reservation.name}</td>
+              <td>{reservation.participants}</td>
+              <td>{reservation.phoneNumber}</td>
+              <td>{reservation.date}</td>
               <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
               <td>{reservation.date}</td>
@@ -77,8 +105,17 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
                 {reservation.activities.map((activity) => {
                   return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
                 })}
+                {reservation.activities.map((activity) => {
+                  return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
+                })}
               </td>
               <td>
+                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
+                  Edit
+                </button>
+                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                  Delete
+                </button>
                 <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
                   Edit
                 </button>
@@ -91,7 +128,12 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
         </tbody>
       </table>
     </div>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
+}
 }
 
 export default ReservationList;
