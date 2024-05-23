@@ -9,20 +9,20 @@ import Calendar from "./pages/Calendar";
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/reservations" element={<ReservationPage />} />
-          <Route path="/calendar" element={<Calendar />} />
-          {/* <Route path="/new-reservation" element={<ReservationForm />} />
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/reservations" element={<ReservationPage />} />
+            <Route path="/calendar" element={<Calendar />} />
+            {/* <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="/reservations" element={<ReservationList  />} />
            /> */}
-          <Route path="*" element={<h1>Not Found</h1>} />
-        </Routes>
-      </Layout>
-    </Router>
+            <Route path="*" element={<h1>Not Found</h1>} />
+          </Routes>
+        </Layout>
+      </Router>
   );
 }
 

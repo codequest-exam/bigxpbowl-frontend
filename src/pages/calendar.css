@@ -1,9 +1,19 @@
+html,
+body,
+#root,
+.App {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .calendar-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f9f9f9;
-  padding-top: 100px;
+  padding-top: 11vh;
+  margin-right: 5vw;
+  margin-bottom: 5vh;
 }
 
 .calendar-header {
@@ -14,26 +24,97 @@
 
 .calendar-table {
   width: 100%;
-  max-width: 1200px;
+  max-width: 95vw;
   border-collapse: collapse;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-spacing: 0;
   overflow: hidden;
+  table-layout: fixed;
 }
 
 .calendar-table th {
   padding: 12px 15px;
   text-align: left;
   font-weight: bold;
+  background-color: #f9f9f9;
 }
 
 .calendar-table td {
   padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
   color: #333;
 }
 
 .calendar-table tbody tr:hover {
   background-color: #f1f1f1;
+}
+
+.calendar-table tr:last-child td {
+  border-bottom: none;
+}
+
+.calendar-table th:last-child,
+.calendar-table td:last-child {
+  border-right: none;
+}
+
+.calendar-btn,
+.calendar-btn-2 {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 20px 10px;
+  color: #fff;
+  /* border: 2px solid #000; */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.calendar-btn {
+  background-color: #007bff;
+}
+
+.calendar-btn-2 {
+  background-color: #ff8820;
+}
+
+.calendar-btn:hover,
+.calendar-btn-2:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+}
+
+.calendar-btn-2:hover {
+  background-color: #cc6e16;
+}
+
+.current-week {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: none;
+}
+
+/* Borders */
+
+tbody,
+th {
+  border: 1px solid #000;
+}
+
+.dates-headline {
+  border: 1px solid #000;
+}
+
+.td-border {
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+/* Title font size */
+
+.calendar-activity-title {
+  font-size: 2em;
+  margin: 0;
 }

@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import "../styling/reservations.css";
 import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
-import {
-  ReservationListItem,
-  ReservationFormData,
-} from "../interfaces/reservationInterface";
+import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function ReservationList({
-  setFormData,
-}: {
-  setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
-}) {
+function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
   const [reservations, setReservations] = useState<ReservationListItem[]>([]);
 
   useEffect(() => {
@@ -51,15 +46,18 @@ function ReservationList({
     try {
       await deleteReservation(id);
       setReservations(await getReservations());
+      toast.success("Reservation deleted");
       console.log("Reservation deleted");
     } catch (error) {
+      toast.error("Could not delete reservation, something went wrong.");
       console.error(error);
     }
   };
 
   return (
     <div className="reservations-page">
-      <h1 className="reservations-header">Reservations</h1>
+      <ToastContainer />
+      <h2 className="reservations-header">Reservations</h2>
       <table className="reservations-table">
         <thead>
           <tr>
@@ -93,16 +91,10 @@ function ReservationList({
                 })}
               </td>
               <td>
-                <button
-                  className="edit-button"
-                  onClick={() => handleEdit(reservation.id)}
-                >
+                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
                   Edit
                 </button>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDelete(reservation.id)}
-                >
+                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
                   Delete
                 </button>
               </td>
