@@ -5,8 +5,7 @@ import {
   ReservationWithStringDates,
   CompetitionDay,
 } from "../interfaces/reservationInterface";
-
-const API_URL = "http://localhost:8080";
+import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
