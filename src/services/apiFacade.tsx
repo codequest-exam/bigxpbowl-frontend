@@ -1,33 +1,37 @@
 import {
-  Reservation,
-  ReservationListItem,
-  ReservationWithStringDates,
+    Reservation,
+    ReservationListItem,
+    ReservationWithStringDates,
 } from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
-  return fetch(API_URL + "/reservations").then(handleHttpErrors);
+    return fetch(API_URL + "/reservations").then(handleHttpErrors);
 }
 
 async function getSingleReservation(
-  id: number
+    id: number
 ): Promise<ReservationWithStringDates> {
-  const reservation = await fetch(API_URL + "/reservations/" + id).then(
-    handleHttpErrors
-  );
-  console.log(reservation);
+    const reservation = await fetch(API_URL + "/reservations/" + id).then(
+        handleHttpErrors
+    );
+    console.log(reservation);
 
-  return reservation;
-  // makeDates(reservation);
-  // console.log(reservation);
+    return reservation;
 }
 
 async function addReservation(newReservation: Reservation) {
-  const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
-  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+    const options = makeOptions("POST", newReservation);
+    return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }
+
+async function deleteReservation(id: number) {
+    const options = makeOptions("DELETE", null);
+    return await fetch(API_URL + "/reservations/" + id, options).then(handleHttpErrors);
+}
+
+
 
 function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
@@ -66,4 +70,4 @@ async function handleHttpErrors(res: Response) {
 //   });
 // }
 
-export { getReservations, getSingleReservation, addReservation };
+export { getReservations, getSingleReservation, addReservation, deleteReservation};

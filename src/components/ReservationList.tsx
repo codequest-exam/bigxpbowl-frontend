@@ -67,22 +67,6 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
         </thead>
         <tbody>
           {reservations.map((reservation) => (
-    <div className="reservations-page">
-      <h1 className="reservations-header">Reservations</h1>
-      <table className="reservations-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Number of Participants</th>
-            <th>Date</th>
-            <th>Chosen Activities</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reservations.map((reservation) => (
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
               <td>{reservation.name}</td>
