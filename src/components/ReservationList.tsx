@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation } from "../services/apiFacade";
+import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
   const [reservations, setReservations] = useState<ReservationListItem[]>([]);
@@ -39,15 +41,23 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     // onEdit(reservation);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     console.log("Delete reservation with id: ", id);
-
-    // Handle delete logic here
+    try {
+      await deleteReservation(id);
+      setReservations(await getReservations());
+      toast.success("Reservation deleted");
+      console.log("Reservation deleted");
+    } catch (error) {
+      toast.error("Could not delete reservation, something went wrong.");
+      console.error(error);
+    }
   };
 
   return (
     <div className="reservations-page">
-      <h2 className="reservations-header">Reservations</h2>
+      <ToastContainer />
+      <h1 className="reservations-header">Reservations</h1>
       <table className="reservations-table">
         <thead>
           <tr>
@@ -70,7 +80,14 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
               <td>{reservation.date}</td>
               <td>
                 {reservation.activities.map((activity) => {
-                  return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
+                  return (
+                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
+                    activity.substring(0, 1) +
+                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
+
+                    activity.substring(1).toLocaleLowerCase() +
+                    "\n"
+                  );
                 })}
               </td>
               <td>

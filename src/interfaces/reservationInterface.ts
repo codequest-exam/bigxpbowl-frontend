@@ -15,7 +15,18 @@ export interface Reservation {
   name: string;
   phoneNumber: string;
   participants: number;
+  startTime: string;
+  endTime: string;
+  date: string;
   activities: Array<ChosenActivity>;
+}
+export interface RecurringReservation {
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+  phoneNumber: string;
+  name: string;
+  participants: number;
 }
 
 export interface ChosenActivity {
@@ -31,8 +42,10 @@ export interface ReservationListItem {
   name: string;
   phoneNumber: string;
   participants: number;
-  activities: string[];
+  activities: Array<ChosenActivity>;
   date: string;
+  startTime: string;
+  endTime: string;
 }
 
 export interface ReservationWithStringDates {
@@ -62,4 +75,7 @@ export interface ReservationFormData {
   startTime: string;
   duration: string;
   activities: Array<ChosenActivityWithStringDates>;
+}
+export interface CompetitionDay {
+  date: Date;
 }
