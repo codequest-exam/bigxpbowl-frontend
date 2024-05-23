@@ -15,14 +15,6 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     };
 
     fetchReservations();
-    const fetchReservations = async () => {
-      const reservationsList = await getReservations();
-      console.log(reservationsList);
-
-      setReservations(reservationsList);
-    };
-
-    fetchReservations();
   }, []);
 
   const handleEdit = async (id: number) => {
@@ -93,29 +85,16 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
           {reservations.map((reservation) => (
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
-              <td>{reservation.id}</td>
               <td>{reservation.name}</td>
               <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
               <td>{reservation.date}</td>
-              <td>{reservation.participants}</td>
-              <td>{reservation.phoneNumber}</td>
-              <td>{reservation.date}</td>
               <td>
-                {reservation.activities.map((activity) => {
-                  return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
-                })}
                 {reservation.activities.map((activity) => {
                   return activity.substring(0, 1) + activity.substring(1).toLocaleLowerCase() + "\n";
                 })}
               </td>
               <td>
-                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
-                  Edit
-                </button>
-                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
-                  Delete
-                </button>
                 <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
                   Edit
                 </button>
@@ -128,12 +107,7 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
         </tbody>
       </table>
     </div>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
-}
 }
 
 export default ReservationList;

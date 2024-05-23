@@ -1,34 +1,35 @@
-export interface Reservation {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  participants: number;
-    activities: Array<string>;
-}
+import {
+  Reservation,
+  ReservationListItem,
+  ReservationWithStringDates,
+} from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
-async function getReservations(): Promise<Array<Reservation>> {
-  return fetch(API_URL + "/reservation").then(handleHttpErrors);
+async function getReservations(): Promise<Array<ReservationListItem>> {
+  return fetch(API_URL + "/reservations").then(handleHttpErrors);
 }
 
-export async function addReservation(
-  newReservation: Reservation,
-) {
+async function getSingleReservation(
+  id: number
+): Promise<ReservationWithStringDates> {
+  const reservation = await fetch(API_URL + "/reservations/" + id).then(
+    handleHttpErrors
+  );
+  console.log(reservation);
+
+  return reservation;
+  // makeDates(reservation);
+  // console.log(reservation);
+}
+
+async function addReservation(newReservation: Reservation) {
   const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservation", options).then(handleHttpErrors);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }
 
-export async function deleteReservation(id: number) {
-  const options = makeOptions("DELETE", null);
-  const response =  await fetch(API_URL + "/reservation/" + id, options).then(handleHttpErrors);
-  return response.status
-}
-
-export function makeOptions(
-  method: string,
-  body: object | null,
-): RequestInit {
+function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
     method: method,
     headers: {
@@ -42,11 +43,11 @@ export function makeOptions(
   return opts;
 }
 
-export async function handleHttpErrors(res: Response) {
-    if (!res.ok) {
-        const fullError = await res.json();
-        throw { status: res.status, fullError };
-    }
+async function handleHttpErrors(res: Response) {
+  if (!res.ok) {
+    const fullError = await res.json();
+    throw { status: res.status, fullError };
+  }
   if (res.status === 204) {
     return {};
   }
@@ -54,5 +55,15 @@ export async function handleHttpErrors(res: Response) {
   return res.json();
 }
 
+// function makeDates(reservation: Reservation) {
+//   const startDate = new Date(reservation.activities[0].date);
+//   console.log(new Date(startDate).setHours(reservation.activities[0].startTime.split(":")[0], reservation.activities[0].startTime.split(":")[1]));
 
-export { getReservations };
+//   reservation.activities.forEach((activity) => {
+//     activity.date = startDate;
+//     // activity.startTime = new Date(startDate).setHours(activity.startTime.split(":")[0], activity.startTime.split(":")[1]);
+//     activity.endTime = new Date(activity.endTime);
+//   });
+// }
+
+export { getReservations, getSingleReservation, addReservation };
