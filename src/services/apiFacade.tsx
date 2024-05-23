@@ -28,10 +28,9 @@ async function addReservation(newReservation: Reservation) {
 
 async function deleteReservation(id: number) {
     const options = makeOptions("DELETE", null);
-    return await fetch(API_URL + "/reservations/" + id, options).then(handleHttpErrors);
+    const response = await fetch(API_URL + "/reservations/" + id, options)
+    return response.status;
 }
-
-
 
 function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
