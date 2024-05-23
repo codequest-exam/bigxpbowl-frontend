@@ -23,7 +23,7 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     // Handle edit logic here
 
     const reservation = await getSingleReservation(id);
-    console.log(reservation);
+    console.log("single reservation", reservation);
 
     setFormData({
       id: reservation.id,
@@ -35,6 +35,7 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
       startTime: "",
       duration: "",
       activityType: "",
+      amount: 1,
     });
     // onEdit(reservation);
   };

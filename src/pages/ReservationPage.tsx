@@ -13,8 +13,9 @@ const defaultObj = {
   participants: 0,
   date: "",
   activityType: "",
-  startTime: "",
+  startTime: "10:00",
   duration: "",
+  amount: 1,
   activities: Array<ChosenActivityWithStringDates>(),
 };
 

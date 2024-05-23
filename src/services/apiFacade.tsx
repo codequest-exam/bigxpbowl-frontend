@@ -4,6 +4,10 @@ const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
+  // const data = await fetch(API_URL + "/reservations");
+  // const reservations = await data.json();
+  // console.log(reservations);
+  // return reservations;
 }
 
 async function getSingleReservation(id: number): Promise<ReservationWithStringDates> {

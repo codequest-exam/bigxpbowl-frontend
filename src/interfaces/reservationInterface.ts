@@ -36,7 +36,7 @@ export interface ReservationListItem {
 }
 
 export interface ReservationWithStringDates {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
@@ -44,7 +44,7 @@ export interface ReservationWithStringDates {
 }
 
 export interface ChosenActivityWithStringDates {
-  id: number;
+  id?: number;
   amountBooked: number;
   activityType: string;
   date: string;
@@ -53,11 +53,12 @@ export interface ChosenActivityWithStringDates {
 }
 
 export interface ReservationFormData {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
   activityType: string;
+  amount: number;
   date: string;
   startTime: string;
   duration: string;
