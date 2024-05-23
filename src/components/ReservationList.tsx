@@ -57,7 +57,7 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
   return (
     <div className="reservations-page">
       <ToastContainer />
-      <h1 className="reservations-header">Reservations</h1>
+      <h2 className="reservations-header">Reservations</h2>
       <table className="reservations-table">
         <thead>
           <tr>
