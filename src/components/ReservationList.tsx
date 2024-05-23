@@ -103,7 +103,7 @@ function ReservationList({
                   className="delete-button"
                   onClick={() => handleDelete(reservation.id)}
                 >
-                  Delete (mangler at fixe json input fejl)
+                  Delete
                 </button>
               </td>
             </tr>
