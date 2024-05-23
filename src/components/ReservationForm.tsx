@@ -50,17 +50,17 @@ export default function ReservationForm({
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newReservation = {
-      name: formData.name,
-      phoneNumber: formData.phoneNumber,
-      participants: +formData.participants,
-      activities: formData.activities.map((activity) => ({ ...activity, activity: activity.activityType.toUpperCase() })),
-      //activities: formData.chosenActivities.forEach(element => element.activity.toUpperCase()),
-    };
+    // const newReservation = {
+    //   name: formData.name,
+    //   phoneNumber: formData.phoneNumber,
+    //   participants: +formData.participants,
+    //   activities: formData.activities.map((activity) => ({ ...activity, activity: activity.activityType.toUpperCase() })),
+    //   //activities: formData.chosenActivities.forEach(element => element.activity.toUpperCase()),
+    // };
+    // console.log(newReservation);
 
     console.log(formData);
 
-    console.log(newReservation);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -72,6 +72,8 @@ export default function ReservationForm({
   };
 
   const handleAddActivity = () => {
+    console.log("adding activity");
+    
     const checks: { [key: string]: boolean } = {
       activity: formData.activityType !== "",
       startTime: formData.startTime !== "",
@@ -80,27 +82,32 @@ export default function ReservationForm({
     };
 
     if (formData.activities.filter((activity) => activity.activityType === formData.activityType).length !== 0) {
+      console.log("FIRST ERROR");
+      
       setErrorMessage("Activity already added");
     } else if (checks.activity && checks.startTime && checks.duration && checks.date) {
-      console.log(formData.startTime);
+      console.log("passed checks");
+      console.log(formData);
+      
 
-      const stringToDate = new Date(formData.date);
-      const time = formData.startTime.split(":");
-      const startTime = new Date(stringToDate.setHours(parseInt(time[0])));
-      const endTime = new Date(stringToDate.setHours(stringToDate.getHours() + parseInt(formData.duration)));
-      stringToDate.setHours(parseInt(formData.startTime.split(":")[0]));
-      stringToDate.setMinutes(parseInt(formData.startTime.split(":")[1]));
-      console.log(stringToDate);
+      // const stringToDate = new Date(formData.date);
+      // const time = formData.startTime.split(":");
+      // const startTime = new Date(stringToDate.setHours(parseInt(time[0])));
+      // const endTime = new Date(stringToDate.setHours(stringToDate.getHours() + parseInt(formData.duration)));
+      // stringToDate.setHours(parseInt(formData.startTime.split(":")[0]));
+      // stringToDate.setMinutes(parseInt(formData.startTime.split(":")[1]));
+      // console.log(stringToDate);
+      const s = formData.startTime
 
       setFormData((prevFormData) => ({
         ...prevFormData,
         chosenActivities: [
           ...prevFormData.activities,
           {
-            activity: formData.activityType,
-            startTime: startTime,
-            endTime: endTime,
-            date: stringToDate,
+            activityType: formData.activityType,
+            startTime: s,
+            endTime: s.charAt(1) + (Number(s.charAt(2))+ +formData.duration) + s.substring(3),
+            date: formData.date,
           },
         ],
         // activity: "",
@@ -109,6 +116,8 @@ export default function ReservationForm({
       }));
       setErrorMessage("");
     } else {
+      console.log("ERROR");
+      
       setErrorMessage(
         "Please fill out " +
           Object.keys(checks)
@@ -150,9 +159,9 @@ export default function ReservationForm({
             Activity:
             <select name="activityType" value={formData.activityType} onChange={handleInputChange}>
               <option value="">Select an activity</option>
-              <option value="Bowling">Bowling</option>
-              <option value="Airhockey">Air Hockey</option>
-              <option value="Dining">Dining</option>
+              <option value="BOWLING">Bowling</option>
+              <option value="AIRHOCKEY">Air Hockey</option>
+              <option value="DINING">Dining</option>
             </select>
             <button type="button" onClick={handleAddActivity}>
               Add
@@ -180,9 +189,9 @@ export default function ReservationForm({
           <ul>
             {formData.activities.map((chosenActivity) => (
               <div key={chosenActivity.activityType}>
-                <li>Activity: {chosenActivity.activityType}</li>
-                {/* <li>Start time: {chosenActivity.startTime.getHours()}</li>
-                <li>End time: {chosenActivity.endTime.getHours()}</li> */}
+                <li>Activity: {chosenActivity.activityType.charAt(0) + chosenActivity.activityType.substring(1).toLocaleLowerCase()}</li>
+                <li>Start time: {chosenActivity.startTime}</li>
+                <li>End time: {chosenActivity.endTime}</li>
 
                 <button type="button" onClick={() => handleRemoveActivity(chosenActivity)}>
                   Remove
