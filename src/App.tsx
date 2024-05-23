@@ -15,9 +15,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/reservations" element={<ReservationPage />} />
+          <Route path="/calendar" element={<Calendar />} />
           {/* <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="/reservations" element={<ReservationList  />} />
-          <Route path="/calendar" element={<Calendar />} /> */}
+           /> */}
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Layout>
