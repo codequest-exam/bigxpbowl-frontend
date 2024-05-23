@@ -3,6 +3,7 @@ import {
   Reservation,
   ReservationListItem,
   ReservationWithStringDates,
+  CompetitionDay,
 } from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
@@ -26,7 +27,12 @@ async function getRecurringReservations(): Promise<
 > {
   return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
-
+async function getCompetitionDays(): Promise<Array<CompetitionDay>> {
+  const competitionDays = await fetch(
+    API_URL + "/reservations/competition-day"
+  ).then(handleHttpErrors);
+  return competitionDays;
+}
 async function addReservation(newReservation: Reservation) {
   const options = makeOptions("POST", newReservation);
   return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
@@ -81,4 +87,5 @@ export {
   addReservation,
   deleteReservation,
   getRecurringReservations,
+  getCompetitionDays,
 };

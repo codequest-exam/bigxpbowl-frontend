@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import {
   getReservations,
   getRecurringReservations,
+  getCompetitionDays,
 } from "../services/apiFacade";
 import {
   RecurringReservation,
   Reservation,
+  CompetitionDay,
 } from "../interfaces/reservationInterface";
 import "./calendar.css";
 
@@ -22,6 +24,7 @@ export default function Calendar() {
   const [recurringReservations, setRecurringReservations] = useState<
     RecurringReservation[]
   >([]);
+  const [competitionDays, setCompetitionDays] = useState<CompetitionDay[]>([]);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -30,6 +33,13 @@ export default function Calendar() {
     };
 
     fetchReservations();
+  }, []);
+  useEffect(() => {
+    const fetchCompetitionDays = async () => {
+      const competitionDaysList = await getCompetitionDays();
+      setCompetitionDays(competitionDaysList);
+    };
+    fetchCompetitionDays();
   }, []);
 
   useEffect(() => {
@@ -80,8 +90,14 @@ export default function Calendar() {
     timeSlot: string
   ) => {
     const formattedDate = date.toISOString().split("T")[0];
-    const timeSlotHour = parseInt(timeSlot.split(":")[0]);
-    const timeSlotMinutes = parseInt(timeSlot.split(":")[1]);
+
+    const isCompetitionDay = competitionDays.some(
+      (competitionDay) =>
+        new Date(competitionDay.date).toISOString().split("T")[0] ===
+        formattedDate
+    );
+
+    if (isCompetitionDay) return "Competition";
 
     const oneTimeReservationsCount = reservations.filter((reservation) => {
       const reservationDate = new Date(reservation.date)
@@ -183,7 +199,7 @@ export default function Calendar() {
               <td>{timeSlot}</td>
               {daysOfWeek.map((date, index) => (
                 <td key={index}>
-                  {countReservations(selectedActivity, date, timeSlot)}/24
+                  {countReservations(selectedActivity, date, timeSlot)}
                 </td>
               ))}
             </tr>

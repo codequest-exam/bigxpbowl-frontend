@@ -76,3 +76,6 @@ export interface ReservationFormData {
   duration: string;
   activities: Array<ChosenActivityWithStringDates>;
 }
+export interface CompetitionDay {
+  date: Date;
+}
