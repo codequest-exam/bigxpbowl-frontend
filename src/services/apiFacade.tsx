@@ -1,4 +1,8 @@
-import { Reservation, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
+import {
+  Reservation,
+  ReservationListItem,
+  ReservationWithStringDates,
+} from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
@@ -6,8 +10,12 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
 }
 
-async function getSingleReservation(id: number): Promise<ReservationWithStringDates> {
-  const reservation = await fetch(API_URL + "/reservations/" + id).then(handleHttpErrors);
+async function getSingleReservation(
+  id: number
+): Promise<ReservationWithStringDates> {
+  const reservation = await fetch(API_URL + "/reservations/" + id).then(
+    handleHttpErrors
+  );
   console.log(reservation);
 
   return reservation;
@@ -17,6 +25,7 @@ async function getSingleReservation(id: number): Promise<ReservationWithStringDa
 
 async function addReservation(newReservation: Reservation) {
   const options = makeOptions("POST", newReservation);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
   return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }
 
@@ -49,7 +58,7 @@ async function handleHttpErrors(res: Response) {
 // function makeDates(reservation: Reservation) {
 //   const startDate = new Date(reservation.activities[0].date);
 //   console.log(new Date(startDate).setHours(reservation.activities[0].startTime.split(":")[0], reservation.activities[0].startTime.split(":")[1]));
-  
+
 //   reservation.activities.forEach((activity) => {
 //     activity.date = startDate;
 //     // activity.startTime = new Date(startDate).setHours(activity.startTime.split(":")[0], activity.startTime.split(":")[1]);
