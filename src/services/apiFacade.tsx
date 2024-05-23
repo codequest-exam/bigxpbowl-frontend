@@ -1,35 +1,41 @@
 import {
-    Reservation,
-    ReservationListItem,
-    ReservationWithStringDates,
+  RecurringReservation,
+  Reservation,
+  ReservationListItem,
+  ReservationWithStringDates,
 } from "../interfaces/reservationInterface";
 
 const API_URL = "http://localhost:8080";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
-    return fetch(API_URL + "/reservations").then(handleHttpErrors);
+  return fetch(API_URL + "/reservations").then(handleHttpErrors);
 }
 
 async function getSingleReservation(
-    id: number
+  id: number
 ): Promise<ReservationWithStringDates> {
-    const reservation = await fetch(API_URL + "/reservations/" + id).then(
-        handleHttpErrors
-    );
-    console.log(reservation);
+  const reservation = await fetch(API_URL + "/reservations/" + id).then(
+    handleHttpErrors
+  );
+  console.log(reservation);
 
-    return reservation;
+  return reservation;
+}
+async function getRecurringReservations(): Promise<
+  Array<RecurringReservation>
+> {
+  return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
 
 async function addReservation(newReservation: Reservation) {
-    const options = makeOptions("POST", newReservation);
-    return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+  const options = makeOptions("POST", newReservation);
+  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
 }
 
 async function deleteReservation(id: number) {
-    const options = makeOptions("DELETE", null);
-    const response = await fetch(API_URL + "/reservations/" + id, options)
-    return response.status;
+  const options = makeOptions("DELETE", null);
+  const response = await fetch(API_URL + "/reservations/" + id, options);
+  return response.status;
 }
 
 function makeOptions(method: string, body: object | null): RequestInit {
@@ -69,4 +75,10 @@ async function handleHttpErrors(res: Response) {
 //   });
 // }
 
-export { getReservations, getSingleReservation, addReservation, deleteReservation};
+export {
+  getReservations,
+  getSingleReservation,
+  addReservation,
+  deleteReservation,
+  getRecurringReservations,
+};

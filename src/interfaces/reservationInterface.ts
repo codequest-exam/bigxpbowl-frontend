@@ -20,6 +20,14 @@ export interface Reservation {
   date: string;
   activities: Array<ChosenActivity>;
 }
+export interface RecurringReservation {
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+  phoneNumber: string;
+  name: string;
+  participants: number;
+}
 
 export interface ChosenActivity {
   id?: number;
