@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation } from "../services/apiFacade";
+import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 
 function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
@@ -39,10 +39,15 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     // onEdit(reservation);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     console.log("Delete reservation with id: ", id);
-
-    // Handle delete logic here
+    try {
+      await deleteReservation(id);
+      setReservations(await getReservations());
+      console.log("Reservation deleted");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
