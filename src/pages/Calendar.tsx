@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
-import { getReservations } from "../services/apiFacade";
-import { Reservation } from "../interfaces/reservationInterface";
+import {
+  getReservations,
+  getRecurringReservations,
+  getCompetitionDays,
+} from "../services/apiFacade";
+import {
+  RecurringReservation,
+  Reservation,
+  CompetitionDay,
+} from "../interfaces/reservationInterface";
 import "./calendar.css";
 
 interface Week {
@@ -13,6 +21,10 @@ export default function Calendar() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedActivity, setSelectedActivity] = useState("BOWLING");
   const [selectedWeek, setSelectedWeek] = useState<Week>();
+  const [recurringReservations, setRecurringReservations] = useState<
+    RecurringReservation[]
+  >([]);
+  const [competitionDays, setCompetitionDays] = useState<CompetitionDay[]>([]);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -21,6 +33,21 @@ export default function Calendar() {
     };
 
     fetchReservations();
+  }, []);
+  useEffect(() => {
+    const fetchCompetitionDays = async () => {
+      const competitionDaysList = await getCompetitionDays();
+      setCompetitionDays(competitionDaysList);
+    };
+    fetchCompetitionDays();
+  }, []);
+
+  useEffect(() => {
+    const fetchRecurringReservations = async () => {
+      const recurringReservationsList = await getRecurringReservations();
+      setRecurringReservations(recurringReservationsList);
+    };
+    fetchRecurringReservations();
   }, []);
 
   useEffect(() => {
@@ -63,7 +90,16 @@ export default function Calendar() {
     timeSlot: string
   ) => {
     const formattedDate = date.toISOString().split("T")[0];
-    return reservations.filter((reservation) => {
+
+    const isCompetitionDay = competitionDays.some(
+      (competitionDay) =>
+        new Date(competitionDay.date).toISOString().split("T")[0] ===
+        formattedDate
+    );
+
+    if (isCompetitionDay) return "Competition";
+
+    const oneTimeReservationsCount = reservations.filter((reservation) => {
       const reservationDate = new Date(reservation.date)
         .toISOString()
         .split("T")[0];
@@ -75,13 +111,37 @@ export default function Calendar() {
       ).getTime();
       const slotTime = new Date(`1970-01-01T${timeSlot}`).getTime();
       return (
-        //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
         reservation.activities.includes(activity) &&
         reservationDate === formattedDate &&
         slotTime >= reservationStartTime &&
         slotTime < reservationEndTime
       );
     }).length;
+
+    let recurringReservationsCount = 0;
+    if (activity === "BOWLING") {
+      const dayOfWeek = date
+        .toLocaleString("en-US", { weekday: "long" })
+        .toUpperCase();
+      recurringReservationsCount = recurringReservations.filter(
+        (reservation) => {
+          const reservationStartTime = new Date(
+            `1970-01-01T${reservation.startTime}`
+          ).getTime();
+          const reservationEndTime = new Date(
+            `1970-01-01T${reservation.endTime}`
+          ).getTime();
+          const slotTime = new Date(`1970-01-01T${timeSlot}`).getTime();
+          return (
+            reservation.dayOfWeek === dayOfWeek &&
+            slotTime >= reservationStartTime &&
+            slotTime < reservationEndTime
+          );
+        }
+      ).length;
+    }
+
+    return oneTimeReservationsCount + recurringReservationsCount;
   };
 
   const daysOfWeek = Array.from({ length: 7 }, (_, i) => {
