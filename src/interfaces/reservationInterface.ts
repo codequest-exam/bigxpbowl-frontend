@@ -15,6 +15,9 @@ export interface Reservation {
   name: string;
   phoneNumber: string;
   participants: number;
+  startTime: string;
+  endTime: string;
+  date: string;
   activities: Array<ChosenActivity>;
 }
 
@@ -31,8 +34,10 @@ export interface ReservationListItem {
   name: string;
   phoneNumber: string;
   participants: number;
-  activities: string[];
+  activities: Array<ChosenActivity>;
   date: string;
+  startTime: string;
+  endTime: string;
 }
 
 export interface ReservationWithStringDates {
