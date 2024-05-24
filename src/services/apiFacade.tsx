@@ -9,6 +9,10 @@ import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
+  // const data = await fetch(API_URL + "/reservations");
+  // const reservations = await data.json();
+  // console.log(reservations);
+  // return reservations;
 }
 
 async function getSingleReservation(
