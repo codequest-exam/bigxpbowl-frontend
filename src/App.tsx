@@ -6,6 +6,7 @@ import About from "./components/About";
 // import ReservationList from "./components/ReservationList";
 import ReservationPage from "./pages/ReservationPage";
 import Calendar from "./pages/Calendar";
+import Schedule from "./components/Schedule";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/reservations" element={<ReservationPage />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/schedule" element={<Schedule/>} />
             {/* <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="/reservations" element={<ReservationList  />} />
            /> */}
