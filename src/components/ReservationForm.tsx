@@ -1,58 +1,24 @@
 import React, { useState } from "react";
 import "../styling/reservationform.css";
 import { ChosenActivityWithStringDates, ReservationFormData, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
-import { defaultFormObj } from "../pages/ReservationPage";
+
 import { getReservations, submitReservation } from "../services/apiFacade";
-
-// export interface ChosenActivityWithStringDates {
-//   id: number;
-//   amountBooked: number;
-//   activityType: string;
-//   date: string;
-//   startTime: string;
-//   endTime: string;
-// }
-
-// export interface ReservationFormData {
-//   id: number;
-//   name: string;
-//   phoneNumber: string;
-//   participants: number;
-//   activityType: string;
-//   date: string;
-//   startTime: string;
-//   duration: string;
-//   activities: Array<ChosenActivityWithStringDates>;
-// }
 
 export default function ReservationForm({
   setFormData,
   formData,
   setReservations,
+  defaultFormObj
 }: {
   setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
   formData: ReservationFormData;
   setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>;
+  defaultFormObj: ReservationFormData;
 }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("formdata", formData);
-
-    // console.log("formdata date", formData.date);
-    // console.log(new Date(formData.date));
-
-    // const stringToDate = new Date(formData.date);
-    // // const time = formData.startTime.split(":");
-    // // const startTime = new Date(stringToDate.setHours(parseInt(time[0])));
-    // // const endTime = new Date(stringToDate.setHours(stringToDate.getHours() + parseInt(formData.duration)));
-    // // stringToDate.setHours(parseInt(formData.startTime.split(":")[0]));
-    // // stringToDate.setMinutes(parseInt(formData.startTime.split(":")[1]));
-    // console.log(stringToDate.toDateString());
-    // console.log(stringToDate.toTimeString());
-    // console.log(stringToDate.toISOString());
-
     // of type ReservationWithStringDates:
     const newReservation: ReservationWithStringDates = {
       name: formData.name,

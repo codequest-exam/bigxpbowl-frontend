@@ -6,7 +6,7 @@ import ReservationList from "../components/ReservationList";
 
 
 
-export const defaultFormObj = {
+ const defaultFormObj = {
   id: 0,
   name: "",
   phoneNumber: "",
@@ -29,10 +29,10 @@ const [reservations, setReservations] = useState<ReservationListItem[]>([]);
     <div style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw" }}>
       <div>
         <ReservationForm
-          
           setFormData={setFormData}
           formData={formData}
           setReservations={setReservations}
+          defaultFormObj={defaultFormObj}
         />
       </div>
       <div>
