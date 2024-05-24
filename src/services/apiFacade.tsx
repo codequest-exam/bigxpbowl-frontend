@@ -1,15 +1,18 @@
 import {
   RecurringReservation,
-  Reservation,
+  
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
 } from "../interfaces/reservationInterface";
-
-const API_URL = "http://localhost:8080";
+import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
+  // const data = await fetch(API_URL + "/reservations");
+  // const reservations = await data.json();
+  // console.log(reservations);
+  // return reservations;
 }
 
 async function getSingleReservation(
@@ -22,20 +25,25 @@ async function getSingleReservation(
 
   return reservation;
 }
+
 async function getRecurringReservations(): Promise<
   Array<RecurringReservation>
 > {
   return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
+
 async function getCompetitionDays(): Promise<Array<CompetitionDay>> {
   const competitionDays = await fetch(
     API_URL + "/reservations/competition-day"
   ).then(handleHttpErrors);
   return competitionDays;
 }
-async function addReservation(newReservation: Reservation) {
-  const options = makeOptions("POST", newReservation);
-  return await fetch(API_URL + "/reservations", options).then(handleHttpErrors);
+
+
+async function submitReservation(newReservation: ReservationWithStringDates) {
+  const URL = newReservation.id ? API_URL + "/reservations/" + newReservation.id : API_URL + "/reservations";
+  const options = makeOptions(newReservation.id ? "PUT" : "POST", newReservation);
+  return await fetch(URL, options).then(handleHttpErrors);
 }
 
 async function deleteReservation(id: number) {
@@ -84,7 +92,7 @@ async function handleHttpErrors(res: Response) {
 export {
   getReservations,
   getSingleReservation,
-  addReservation,
+  submitReservation,
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,

@@ -49,15 +49,17 @@ export interface ReservationListItem {
 }
 
 export interface ReservationWithStringDates {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
   activities: Array<ChosenActivityWithStringDates>;
+  
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }
 
 export interface ChosenActivityWithStringDates {
-  id: number;
+  id?: number;
   amountBooked: number;
   activityType: string;
   date: string;
@@ -66,15 +68,18 @@ export interface ChosenActivityWithStringDates {
 }
 
 export interface ReservationFormData {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
   activityType: string;
+  amount: number;
   date: string;
   startTime: string;
   duration: string;
   activities: Array<ChosenActivityWithStringDates>;
+
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }
 export interface CompetitionDay {
   date: Date;
