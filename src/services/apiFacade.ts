@@ -4,7 +4,7 @@ import {
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
-} from "../interfaces/reservationInterface";
+} from "../interfaces/reservationInterface.ts";
 import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
@@ -26,9 +26,7 @@ async function getSingleReservation(
   return reservation;
 }
 
-async function getRecurringReservations(): Promise<
-  Array<RecurringReservation>
-> {
+async function getRecurringReservations(): Promise<  Array<RecurringReservation>> {
   return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
 
@@ -50,6 +48,18 @@ async function deleteReservation(id: number) {
   const options = makeOptions("DELETE", null);
   const response = await fetch(API_URL + "/reservations/" + id, options);
   return response.status;
+}
+
+async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
+  const reqObj ={ date, startTime, endTime, activityType}
+  console.log(reqObj);
+  
+  const URL = `${API_URL}/activity/available`;
+  const options = makeOptions("POST", reqObj);
+  const result = await fetch(URL, options).then(handleHttpErrors);
+  console.log(result);
+  return result;
+
 }
 
 function makeOptions(method: string, body: object | null): RequestInit {
@@ -96,4 +106,5 @@ export {
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,
+  getAvailableSlots
 };
