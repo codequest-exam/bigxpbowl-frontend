@@ -5,6 +5,7 @@ import {
   CompetitionDay,
 } from "../interfaces/reservationInterface";
 import { Product } from "../interfaces/productInterface";
+import { Equipment } from "../interfaces/equipmentInterface";
 import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
@@ -59,7 +60,13 @@ async function deleteReservation(id: number) {
   const response = await fetch(API_URL + "/reservations/" + id, options);
   return response.status;
 }
-
+async function getEquipment() {
+  return fetch(API_URL + "/equipment").then(handleHttpErrors);
+}
+async function updateEquipment(id: number, equipment: Equipment) {
+  const options = makeOptions("PUT", equipment);
+  return fetch(`${API_URL}/equipment/${id}`, options).then(handleHttpErrors);
+}
 function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
     method: method,
@@ -105,4 +112,6 @@ export {
   getRecurringReservations,
   getCompetitionDays,
   getProducts,
+  getEquipment,
+  updateEquipment,
 };
