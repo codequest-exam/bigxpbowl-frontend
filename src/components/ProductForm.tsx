@@ -1,59 +1,76 @@
-import React, { useState } from "react";
-import "../styling/productform.css";
+import { useState, useEffect } from "react";
+import { createProduct, updateProduct } from "../services/apiFacade";
+import { Product } from "../interfaces/productInterface";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface ProductFormProps {
   onSubmit: (product: Product) => void;
+  product: Product | null;
 }
 
-interface Product {
-  name: string;
-  price: number;
-  imgUrl: string;
-}
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, product }) => {
+  const defaultFormObj: Product = { id: undefined, name: "", price: 0 };
 
-const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [imgUrl, setimgUrl] = useState("");
+  const [formData, setFormData] = useState<Product>(product || defaultFormObj);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    setFormData(product || defaultFormObj);
+  }, [product]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      let savedProduct;
+      if (formData.id) {
+        savedProduct = await updateProduct(formData.id, formData);
+      } else {
+        savedProduct = await createProduct(formData);
+      }
+      onSubmit(savedProduct);
+      setFormData(defaultFormObj);
+      toast.success("Product saved successfully");
+    } catch (error) {
+      console.error("Error saving product:", error);
+      toast.error("Failed to save product");
+    }
+  };
 
-    const newProduct: Product = {
-      name,
-      price,
-      imgUrl,
-    };
-
-    onSubmit(newProduct);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ color: "black" }}>
-      <label>
-        Name:
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Price:
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-        />
-      </label>
-      <br />
-      <label>
-        Image url:
-        <input value={imgUrl} onChange={(e) => setimgUrl(e.target.value)} />
-      </label>
-      <br />
-      <button type="submit">Create Product</button>
-    </form>
+    <div className="reservation-form-page">
+      <h2 className="reservation-header">Add New Product</h2>
+      <div className="reservation-form-container">
+        <form className="reservation-form" onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Price:
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
+            />
+          </label>
+          <button type="submit">Save Product</button>
+        </form>
+      </div>
+    </div>
   );
 };
 

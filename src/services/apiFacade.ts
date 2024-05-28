@@ -16,7 +16,12 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // return reservations;
 }
 
-async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
+async function getAvailableSlots(
+  date: string,
+  startTime: string,
+  endTime: string,
+  activityType: string
+): Promise<number> {
   const reqObj = { date, startTime, endTime, activityType };
   console.log(reqObj);
 
@@ -29,6 +34,10 @@ async function getAvailableSlots(date: string, startTime: string, endTime: strin
 
 async function getProducts(): Promise<Array<Product>> {
   return fetch(API_URL + "/products").then(handleHttpErrors);
+}
+async function createProduct(product: Product) {
+  const options = makeOptions("POST", product);
+  return fetch(API_URL + "/products", options).then(handleHttpErrors);
 }
 async function updateProduct(id: number, product: Product) {
   const options = makeOptions("PUT", product);
@@ -132,6 +141,7 @@ export {
   getRecurringReservations,
   getCompetitionDays,
   getProducts,
+  createProduct,
   updateProduct,
   deleteProduct,
   getEquipment,

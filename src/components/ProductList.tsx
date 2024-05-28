@@ -1,22 +1,26 @@
-import { useEffect, useState } from "react";
 import "../styling/productlist.css";
-import { getProducts, deleteProduct } from "../services/apiFacade";
+import { deleteProduct } from "../services/apiFacade";
 import { Product } from "../interfaces/productInterface";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function ProductList() {
-  const [products, setProducts] = useState<Product[]>([]);
+interface ProductListProps {
+  products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  onEdit: (product: Product) => void;
+}
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const productsList = await getProducts();
-      setProducts(productsList);
-    };
-    fetchProducts();
-  }, []);
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  setProducts,
+  onEdit,
+}) => {
+  const handleDelete = async (id: number | undefined) => {
+    if (id === undefined) {
+      console.error("Cannot delete product: id is undefined");
+      return;
+    }
 
-  const handleDelete = async (id: number) => {
     try {
       await deleteProduct(id);
       setProducts(products.filter((product) => product.id !== id));
@@ -26,15 +30,16 @@ function ProductList() {
       console.error(error);
     }
   };
+  const handleEdit = async (product: Product) => {
+    onEdit(product);
+  };
 
   return (
     <div className="product-list-page">
-      <ToastContainer />
       <h2 className="product-header">Products</h2>
       <table className="product-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Price</th>
             <th>Actions</th>
@@ -43,11 +48,15 @@ function ProductList() {
         <tbody>
           {products.map((product) => (
             <tr key={product.id}>
-              <td>{product.id}</td>
               <td>{product.name}</td>
               <td>{product.price}</td>
               <td>
-                <button className="edit-button">Edit</button>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(product)}
+                >
+                  Edit
+                </button>
                 <button
                   className="delete-button"
                   onClick={() => handleDelete(product.id)}
@@ -61,6 +70,6 @@ function ProductList() {
       </table>
     </div>
   );
-}
+};
 
 export default ProductList;
