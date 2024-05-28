@@ -15,6 +15,7 @@ export default function NavHeader() {
             <NavLink to="/schedule">Schedule</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/orderproducts">Order Products</NavLink>
+            <NavLink to="/equipment">Equipment</NavLink>
           </li>
         </div>
       </ul>

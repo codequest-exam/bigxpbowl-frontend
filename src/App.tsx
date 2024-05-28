@@ -9,26 +9,28 @@ import Calendar from "./pages/Calendar";
 import Schedule from "./components/Schedule";
 import OrderProducts from "./pages/OrderProducts";
 import Products from "./pages/Products";
+import EquipmentPage from "./pages/EquipmentPage";
 
 function App() {
   return (
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/reservations" element={<ReservationPage />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/schedule" element={<Schedule/>} />
-            <Route path="/orderproducts" element={<OrderProducts/>} />
-            <Route path="/products" element={<Products />} />
-            {/* <Route path="/new-reservation" element={<ReservationForm />} />
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/reservations" element={<ReservationPage />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/schedule" element={<Schedule/>} />
+          <Route path="/orderproducts" element={<OrderProducts/>} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/equipment" element={<EquipmentPage />} />
+          {/* <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="/reservations" element={<ReservationList  />} />
            /> */}
-            <Route path="*" element={<h1>Not Found</h1>} />
-          </Routes>
-        </Layout>
-      </Router>
+          <Route path="*" element={<h1>Not Found</h1>} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
