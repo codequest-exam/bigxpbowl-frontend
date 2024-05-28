@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import "../styling/navbar.css";
+import { RoleContext } from "../services/RoleContext.tsx";
 
 export default function NavHeader() {
+  const { role } = useContext(RoleContext);
   return (
     <nav className="navbar navbar-style">
       <ul className="navbar-list">
@@ -9,7 +12,8 @@ export default function NavHeader() {
           <li>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/about">About us</NavLink>
-            <NavLink to="/new-reservation">New Reservation</NavLink>
+            {role == "admin" && <NavLink to="/new-reservation">New Reservation</NavLink>}
+
             <NavLink to="/reservations">Reservations</NavLink>
             <NavLink to="/calendar">Calendar</NavLink>
             <NavLink to="/login">Login</NavLink>

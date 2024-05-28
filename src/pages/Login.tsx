@@ -6,10 +6,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // Placeholder logic for handling login
-    console.log("Logging in...");
-    console.log("Username:", username);
-    console.log("Password:", password);
+    if (username === "admin" && password === "admin") {
+      console.log("Login successful");
+    } else {
+      console.log("Login failed");
+    }
+
+    // Role based display logic missing
   };
 
   return (
