@@ -84,9 +84,9 @@ async function handleHttpErrors(res: Response) {
 async function getEquipment() {
   return fetch(API_URL + "/equipment").then(handleHttpErrors);
 }
-async function updateEquipment(equipment: Equipment) {
+async function updateEquipment(id: number, equipment: Omit<Equipment, "id">) {
   const options = makeOptions("PUT", equipment);
-  return fetch(API_URL + "/equipment", options).then(handleHttpErrors);
+  return fetch(`${API_URL}/equipment/${id}`, options).then(handleHttpErrors);
 }
 // function makeDates(reservation: Reservation) {
 //   const startDate = new Date(reservation.activities[0].date);
