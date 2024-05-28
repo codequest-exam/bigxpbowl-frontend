@@ -134,7 +134,7 @@ const Schedule: React.FC<ScheduleProps> = () => {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{ color: "black" }}>
           {hours.map((shift, shiftIndex) => (
             <tr key={shift}>
               <td>{shift}</td>
