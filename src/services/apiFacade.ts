@@ -16,6 +16,17 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // return reservations;
 }
 
+async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
+  const reqObj = { date, startTime, endTime, activityType };
+  console.log(reqObj);
+
+  const URL = `${API_URL}/activities/available`;
+  const options = makeOptions("POST", reqObj);
+  const result = await fetch(URL, options).then(handleHttpErrors);
+  console.log(result);
+  return result;
+}
+
 async function getProducts(): Promise<Array<Product>> {
   return fetch(API_URL + "/products").then(handleHttpErrors);
 }
@@ -125,4 +136,5 @@ export {
   deleteProduct,
   getEquipment,
   updateEquipment,
+  getAvailableSlots,
 };
