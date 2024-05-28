@@ -19,11 +19,9 @@ export default function EquipmentPage() {
   }, []);
 
   return (
-    <div className="equipment-page">
-      <div className="eq-div">
-        <EquipmentOrderForm setFormData={setFormData} formData={formData} defaultFormObj={defaultFormObj} />
-        <EquipmentList equipment={equipment} />
-      </div>
+    <div style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw", justifyContent: "space-evenly" }}>
+      <EquipmentOrderForm setFormData={setFormData} formData={formData} defaultFormObj={defaultFormObj} />
+      <EquipmentList equipment={equipment} />
     </div>
   );
 }
