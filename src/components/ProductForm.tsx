@@ -7,7 +7,7 @@ interface ProductFormProps {
 interface Product {
     name: string;
     price: number;
-    description: string;
+    imgUrl: string;
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
@@ -21,7 +21,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
         const newProduct: Product = {
             name,
             price,
-            description,
+            imgUrl,
         };
 
         onSubmit(newProduct);
