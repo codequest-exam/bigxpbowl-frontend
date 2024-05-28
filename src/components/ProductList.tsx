@@ -1,54 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { getProducts } from '../services/apiFacade';
+import { useEffect, useState } from "react";
+import "../styling/productlist.css";
+import { getProducts, deleteProduct } from "../services/apiFacade";
+import { Product } from "../interfaces/productInterface";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
+function ProductList() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const productsList = await getProducts();
+      setProducts(productsList);
+    };
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProduct(id);
+      setProducts(products.filter((product) => product.id !== id));
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      toast.error("Could not delete product, something went wrong.");
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="product-list-page">
+      <ToastContainer />
+      <h2 className="product-header">Products</h2>
+      <table className="product-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td>{product.id}</td>
+              <td>{product.name}</td>
+              <td>{product.price}</td>
+              <td>
+                <button className="edit-button">Edit</button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(product.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
-
-const ProductList: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-
-    useEffect(() => {
-      const fetchProducts = async () => {
-        const productsList = await getProducts();
-        console.log(productsList);
-
-        setProducts(productsList);
-      };
-
-      fetchProducts();
-    }, []);
-
-    // const handleEdit = (productId: number) => {
-    //     // Handle edit logic here
-    //     console.log(`Editing product with ID: ${productId}`);
-    // };
-
-    // const handleDelete = (productId: number) => {
-    //     // Handle delete logic here
-    //     console.log(`Deleting product with ID: ${productId}`);
-    // };
-
-    return (
-        <div>
-            <h1>Product List</h1>
-            <ul>
-                <li>Coca Cola
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </li>
-                {/* {products.map(product => (
-                    <li key={product.id}>
-                        {product.name} - ${(product.price)}
-                        <button onClick={() => handleEdit(product.id)}>Edit</button>
-                        <button onClick={() => handleDelete(product.id)}>Delete</button>
-                    </li>
-                ))} */}
-            </ul>
-        </div>
-    );
-};
 
 export default ProductList;
