@@ -19,7 +19,7 @@ const ProductCardView: React.FC = () => {
 
     return (
         <div className="product-list">
-            <h3 style={{ color: 'black' }}>Products</h3>
+            <h1 style={{ color: 'black' }}>Beverages</h1>
             <div className="product-grid">
                 {products.map((product) => (
                     <div key={product.id} className="product-card">
