@@ -32,6 +32,7 @@ const ProductList: React.FC<ProductListProps> = ({
   };
   const handleEdit = async (product: Product) => {
     onEdit(product);
+    window.scrollTo(0, 0);
   };
 
   return (
