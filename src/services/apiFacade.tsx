@@ -1,10 +1,10 @@
 import {
   RecurringReservation,
-  
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
 } from "../interfaces/reservationInterface";
+import { Equipment } from "../interfaces/equipmentInterface";
 import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
@@ -39,10 +39,14 @@ async function getCompetitionDays(): Promise<Array<CompetitionDay>> {
   return competitionDays;
 }
 
-
 async function submitReservation(newReservation: ReservationWithStringDates) {
-  const URL = newReservation.id ? API_URL + "/reservations/" + newReservation.id : API_URL + "/reservations";
-  const options = makeOptions(newReservation.id ? "PUT" : "POST", newReservation);
+  const URL = newReservation.id
+    ? API_URL + "/reservations/" + newReservation.id
+    : API_URL + "/reservations";
+  const options = makeOptions(
+    newReservation.id ? "PUT" : "POST",
+    newReservation
+  );
   return await fetch(URL, options).then(handleHttpErrors);
 }
 
@@ -77,7 +81,13 @@ async function handleHttpErrors(res: Response) {
 
   return res.json();
 }
-
+async function getEquipment() {
+  return fetch(API_URL + "/equipment").then(handleHttpErrors);
+}
+async function updateEquipment(equipment: Equipment) {
+  const options = makeOptions("PUT", equipment);
+  return fetch(API_URL + "/equipment", options).then(handleHttpErrors);
+}
 // function makeDates(reservation: Reservation) {
 //   const startDate = new Date(reservation.activities[0].date);
 //   console.log(new Date(startDate).setHours(reservation.activities[0].startTime.split(":")[0], reservation.activities[0].startTime.split(":")[1]));
@@ -96,4 +106,6 @@ export {
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,
+  getEquipment,
+  updateEquipment,
 };
