@@ -13,7 +13,7 @@ export default function NavHeader() {
             <NavLink to="/reservations">Reservations</NavLink>
             <NavLink to="/calendar">Calendar</NavLink>
             <NavLink to="/schedule">Schedule</NavLink>
-            <NavLink to="/products">Products</NavLink>
+            <NavLink to="/products">Manage Products</NavLink>
             <NavLink to="/orderproducts">Order Products</NavLink>
             <NavLink to="/equipment">Equipment</NavLink>
           </li>

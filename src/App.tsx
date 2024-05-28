@@ -8,7 +8,7 @@ import ReservationPage from "./pages/ReservationPage";
 import Calendar from "./pages/Calendar";
 import Schedule from "./components/Schedule";
 import OrderProducts from "./pages/OrderProducts";
-import Products from "./pages/Products";
+import ProductPage from "./pages/ProductPage";
 import EquipmentPage from "./pages/EquipmentPage";
 
 function App() {
@@ -20,9 +20,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/reservations" element={<ReservationPage />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/schedule" element={<Schedule/>} />
-          <Route path="/orderproducts" element={<OrderProducts/>} />
-          <Route path="/products" element={<Products />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/orderproducts" element={<OrderProducts />} />
+          <Route path="/products" element={<ProductPage />} />
           <Route path="/equipment" element={<EquipmentPage />} />
           {/* <Route path="/new-reservation" element={<ReservationForm />} />
           <Route path="/reservations" element={<ReservationList  />} />
