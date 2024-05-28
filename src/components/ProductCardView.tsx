@@ -1,20 +1,23 @@
 import React from 'react';
+import '../styling/productcardview.css';
 
 const ProductCardView: React.FC = () => {
     const products = [
-        { name: 'Coca Cola', price: 2.99 },
-        { name: 'Sprite', price: 2.49 },
-        { name: 'Fanta', price: 2.49 }
+        { name: 'Coca Cola', price: 35 },
+        { name: 'Sprite', price: 50 },
+        { name: 'Fanta', price: 45 }
     ];
-    console.log(products);
-    
 
     return (
-        <div>
+        <div className="product-list">
+            <h3 style={{color: 'black'}}>Hardcoded products</h3>
             {products.map((product, index) => (
-                <div key={index} className="card">
-                    <h3>{product.name}</h3>
-                    <p>Price: ${product.price}</p>
+                <div key={index} className="product-card">
+
+                    {/* <img src={product.image} alt={product.name} className="product-image" /> */}
+                    <h3 className="product-name">{product.name}</h3>
+                    <p className="product-price">Price: {product.price},- dkk</p>
+                    <button className="add-button">Add</button>
                 </div>
             ))}
         </div>

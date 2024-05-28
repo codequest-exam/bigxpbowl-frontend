@@ -1,10 +1,10 @@
 import {
   RecurringReservation,
-  
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
 } from "../interfaces/reservationInterface";
+import { Product } from "../interfaces/productInterface";
 import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
@@ -14,6 +14,11 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // console.log(reservations);
   // return reservations;
 }
+
+async function getProducts(): Promise<Array<Product>> {
+    return fetch(API_URL + "/products")
+    .then((response) => response.json());
+    }
 
 async function getSingleReservation(
   id: number
@@ -96,4 +101,5 @@ export {
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,
+  getProducts,
 };

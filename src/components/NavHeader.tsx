@@ -14,6 +14,7 @@ export default function NavHeader() {
             <NavLink to="/calendar">Calendar</NavLink>
             <NavLink to="/schedule">Schedule</NavLink>
             <NavLink to="/products">Products</NavLink>
+            <NavLink to="/orderproducts">Order Products</NavLink>
           </li>
         </div>
       </ul>
