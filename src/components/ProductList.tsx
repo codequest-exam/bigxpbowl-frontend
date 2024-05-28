@@ -21,27 +21,31 @@ const ProductList: React.FC = () => {
       fetchProducts();
     }, []);
 
-    const handleEdit = (productId: number) => {
-        // Handle edit logic here
-        console.log(`Editing product with ID: ${productId}`);
-    };
+    // const handleEdit = (productId: number) => {
+    //     // Handle edit logic here
+    //     console.log(`Editing product with ID: ${productId}`);
+    // };
 
-    const handleDelete = (productId: number) => {
-        // Handle delete logic here
-        console.log(`Deleting product with ID: ${productId}`);
-    };
+    // const handleDelete = (productId: number) => {
+    //     // Handle delete logic here
+    //     console.log(`Deleting product with ID: ${productId}`);
+    // };
 
     return (
         <div>
             <h1>Product List</h1>
             <ul>
-                {products.map(product => (
+                <li>Coca Cola
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </li>
+                {/* {products.map(product => (
                     <li key={product.id}>
                         {product.name} - ${(product.price)}
                         <button onClick={() => handleEdit(product.id)}>Edit</button>
                         <button onClick={() => handleDelete(product.id)}>Delete</button>
                     </li>
-                ))}
+                ))} */}
             </ul>
         </div>
     );

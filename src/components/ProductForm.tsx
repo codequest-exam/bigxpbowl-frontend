@@ -13,7 +13,7 @@ interface Product {
 const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
-    const [description, setDescription] = useState('');
+    const [imgUrl, setimgUrl] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,8 +40,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
             </label>
             <br />
             <label>
-                Description:
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+                Image url:
+                <input value={imgUrl} onChange={(e) => setimgUrl(e.target.value)} />
             </label>
             <br />
             <button type="submit">Create Product</button>
