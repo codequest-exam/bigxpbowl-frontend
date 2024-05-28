@@ -7,6 +7,7 @@ import {
 import { Product } from "../interfaces/productInterface.ts";
 import { Equipment } from "../interfaces/equipmentInterface.ts";
 import { API_URL } from "../settings.ts";
+import { Maintainable } from "../pages/MaintenancePage.tsx";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
@@ -89,13 +90,41 @@ async function deleteReservation(id: number) {
   const response = await fetch(API_URL + "/reservations/" + id, options);
   return response.status;
 }
+
 async function getEquipment() {
   return fetch(API_URL + "/equipment").then(handleHttpErrors);
 }
+
 async function updateEquipment(id: number, equipment: Equipment) {
   const options = makeOptions("PUT", equipment);
   return fetch(`${API_URL}/equipment/${id}`, options).then(handleHttpErrors);
 }
+
+async function getMaintainables() {
+  const res = await fetch(API_URL + "/maintenance/all").then(handleHttpErrors);
+  const tempArray: Maintainable[] = []
+  console.log(res);
+  
+  for (const list in res) {
+    // tempArray.push(...list);
+    // console.log(list);
+    // console.log(res[list]);
+    res[list].forEach((item: Maintainable) => {
+      tempArray.push(item);
+    });
+    
+  }
+  console.log("tempArray", tempArray);  
+  return tempArray;
+}
+
+async function changeMaintenanceStatus(maintainable: Maintainable) {
+  console.log("maintainable", maintainable);
+  
+  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
+
+}
+
 function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
     method: method,
@@ -147,4 +176,6 @@ export {
   getEquipment,
   updateEquipment,
   getAvailableSlots,
+  getMaintainables,
+  changeMaintenanceStatus,
 };
