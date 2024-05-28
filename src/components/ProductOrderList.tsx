@@ -20,7 +20,7 @@ const ProductOrderList: React.FC<ProductOrderListProps> = ({ products }) => {
         ];
 
         return (
-            <div className="order-list">
+            <div className="order-list" style={{position: 'sticky', top: 80}}>
                 <h2>Hardcoded Product Order List</h2>
                 <ul>
                     {hardcodedProducts.map((product) => (

@@ -7,7 +7,7 @@ export default function OrderProducts() {
   return (
     <>
       <div
-        style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw" }}
+        style={{ display: "flex", margin: "3rem", padding: "2vw", gap: "28vw" }}
       >
         <div>
           <ProductCardView />
