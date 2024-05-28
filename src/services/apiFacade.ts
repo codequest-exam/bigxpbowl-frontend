@@ -15,6 +15,22 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // return reservations;
 }
 
+<<<<<<< HEAD
+=======
+async function getProducts(): Promise<Array<Product>> {
+  return fetch(API_URL + "/products").then(handleHttpErrors);
+}
+async function updateProduct(id: number, product: Product) {
+  const options = makeOptions("PUT", product);
+  return fetch(`${API_URL}/products/${id}`, options).then(handleHttpErrors);
+}
+async function deleteProduct(id: number) {
+  const options = makeOptions("DELETE", null);
+  const response = await fetch(API_URL + "/products/" + id, options);
+  return response.status;
+}
+
+>>>>>>> manage-products
 async function getSingleReservation(
   id: number
 ): Promise<ReservationWithStringDates> {
@@ -106,5 +122,13 @@ export {
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,
+<<<<<<< HEAD
   getAvailableSlots
+=======
+  getProducts,
+  updateProduct,
+  deleteProduct,
+  getEquipment,
+  updateEquipment,
+>>>>>>> manage-products
 };
