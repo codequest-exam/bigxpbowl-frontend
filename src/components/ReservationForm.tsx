@@ -29,7 +29,7 @@ export default function ReservationForm({
       setFreeSlots(free);
     }
     update();
-  }, [formData]);
+  }, [formData.date, formData.startTime, formData.duration, formData.activityType, formData.amount]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,7 +123,7 @@ export default function ReservationForm({
   };
 
   function convertStartStringToEndString(startTime: string) {
-    return Number(startTime.substring(0, 2)) + 2 + ":" + startTime.substring(3);
+    return Number(startTime.substring(0, 2)) + +formData.duration + ":" + startTime.substring(3);
   }
 
   const handleRemoveActivity = (chosenActivity: ChosenActivityWithStringDates) => {

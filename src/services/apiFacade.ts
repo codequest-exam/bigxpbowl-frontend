@@ -54,7 +54,7 @@ async function getAvailableSlots(date: string, startTime: string, endTime: strin
   const reqObj ={ date, startTime, endTime, activityType}
   console.log(reqObj);
   
-  const URL = `${API_URL}/activity/available`;
+  const URL = `${API_URL}/activities/available`;
   const options = makeOptions("POST", reqObj);
   const result = await fetch(URL, options).then(handleHttpErrors);
   console.log(result);
