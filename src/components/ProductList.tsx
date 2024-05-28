@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getProducts } from '../services/apiFacade';
+import { getProducts } from '../services/apiFacade.ts';
 
 interface Product {
     id: number;

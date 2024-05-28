@@ -7,7 +7,7 @@ import {
   ReservationWithStringDates,
 } from "../interfaces/reservationInterface";
 
-import { getReservations, submitReservation, getAvailableSlots } from "../services/apiFacade";
+import { getReservations, submitReservation, getAvailableSlots } from "../services/apiFacade.ts";
 
 export default function ReservationForm({
   setFormData,

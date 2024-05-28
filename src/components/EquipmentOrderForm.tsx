@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styling/equipmentorderform.css";
 import { EquipmentFormData } from "../interfaces/equipmentInterface";
-import { getEquipment } from "../services/apiFacade";
+import { getEquipment } from "../services/apiFacade.ts";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

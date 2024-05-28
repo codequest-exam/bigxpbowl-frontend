@@ -1,6 +1,6 @@
 import { useEffect} from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
+import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

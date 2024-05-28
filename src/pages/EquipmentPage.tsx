@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import EquipmentOrderForm from "../components/EquipmentOrderForm";
 import EquipmentList from "../components/EquipmentList";
 import { Equipment, EquipmentFormData } from "../interfaces/equipmentInterface";
-import { getEquipment } from "../services/apiFacade";
+import { getEquipment } from "../services/apiFacade.ts";
 
 export default function EquipmentPage() {
   const defaultFormObj: EquipmentFormData = { id: 0, name: "", stock: 0 };

@@ -1,6 +1,6 @@
 import { Equipment } from "../interfaces/equipmentInterface";
 import { useState } from "react";
-import { updateEquipment } from "../services/apiFacade";
+import { updateEquipment } from "../services/apiFacade.ts";
 import { toast, ToastContainer } from "react-toastify";
 import "../styling/equipmentlist.css";
 import "react-toastify/dist/ReactToastify.css";

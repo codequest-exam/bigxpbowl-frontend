@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getReservations, getRecurringReservations, getCompetitionDays } from "../services/apiFacade";
+import { getReservations, getRecurringReservations, getCompetitionDays } from "../services/apiFacade.ts";
 import { RecurringReservation, Reservation, CompetitionDay } from "../interfaces/reservationInterface";
 import "./calendar.css";
 
