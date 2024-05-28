@@ -1,11 +1,10 @@
 import {
   RecurringReservation,
+  
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
-} from "../interfaces/reservationInterface";
-import { Product } from "../interfaces/productInterface";
-import { Equipment } from "../interfaces/equipmentInterface";
+} from "../interfaces/reservationInterface.ts";
 import { API_URL } from "../settings.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
@@ -14,10 +13,6 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // const reservations = await data.json();
   // console.log(reservations);
   // return reservations;
-}
-
-async function getProducts(): Promise<Array<Product>> {
-  return fetch(API_URL + "/products").then(handleHttpErrors);
 }
 
 async function getSingleReservation(
@@ -31,9 +26,7 @@ async function getSingleReservation(
   return reservation;
 }
 
-async function getRecurringReservations(): Promise<
-  Array<RecurringReservation>
-> {
+async function getRecurringReservations(): Promise<  Array<RecurringReservation>> {
   return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
 
@@ -44,14 +37,10 @@ async function getCompetitionDays(): Promise<Array<CompetitionDay>> {
   return competitionDays;
 }
 
+
 async function submitReservation(newReservation: ReservationWithStringDates) {
-  const URL = newReservation.id
-    ? API_URL + "/reservations/" + newReservation.id
-    : API_URL + "/reservations";
-  const options = makeOptions(
-    newReservation.id ? "PUT" : "POST",
-    newReservation
-  );
+  const URL = newReservation.id ? API_URL + "/reservations/" + newReservation.id : API_URL + "/reservations";
+  const options = makeOptions(newReservation.id ? "PUT" : "POST", newReservation);
   return await fetch(URL, options).then(handleHttpErrors);
 }
 
@@ -60,13 +49,19 @@ async function deleteReservation(id: number) {
   const response = await fetch(API_URL + "/reservations/" + id, options);
   return response.status;
 }
-async function getEquipment() {
-  return fetch(API_URL + "/equipment").then(handleHttpErrors);
+
+async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
+  const reqObj ={ date, startTime, endTime, activityType}
+  console.log(reqObj);
+  
+  const URL = `${API_URL}/activities/available`;
+  const options = makeOptions("POST", reqObj);
+  const result = await fetch(URL, options).then(handleHttpErrors);
+  console.log(result);
+  return result;
+
 }
-async function updateEquipment(id: number, equipment: Equipment) {
-  const options = makeOptions("PUT", equipment);
-  return fetch(`${API_URL}/equipment/${id}`, options).then(handleHttpErrors);
-}
+
 function makeOptions(method: string, body: object | null): RequestInit {
   const opts: RequestInit = {
     method: method,
@@ -111,7 +106,5 @@ export {
   deleteReservation,
   getRecurringReservations,
   getCompetitionDays,
-  getProducts,
-  getEquipment,
-  updateEquipment,
+  getAvailableSlots
 };
