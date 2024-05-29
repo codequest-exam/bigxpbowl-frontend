@@ -12,6 +12,7 @@ import ProductPage from "./pages/ProductPage";
 import EquipmentPage from "./pages/EquipmentPage";
 import { ToastContainer } from "react-toastify";
 import MaintenancePage from "./pages/MaintenancePage";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/products" element={<ProductPage />} />
             <Route path="/equipment" element={<EquipmentPage />} />
             <Route path="/maintenance" element={<MaintenancePage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="*" element={<h1>Not Found</h1>} />
           </Routes>
         </Layout>
