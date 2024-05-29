@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { RoleContext } from "../services/RoleContext.tsx";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "../styling/login.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const roleContext = useContext(RoleContext);
+  const { setRole } = roleContext;
+
+  const navigate = useNavigate();
+
   const handleLogin = () => {
     if (username === "admin" && password === "admin") {
       console.log("Login successful");
+      setRole("admin");
+      toast.success("Login successful, logged in as Admin");
+      navigate("/");
+    } else if (username === "operator" && password === "operator") {
+      console.log("Login successful");
+      setRole("operator");
+      toast.success("Login successful, logged in as Operator");
+      navigate("/");
+    } else if (username === "employee" && password === "employee") {
+      console.log("Login successful");
+      setRole("employee");
+      toast.success("Login successful, logged in as Employee");
+      navigate("/");
     } else {
       console.log("Login failed");
+      setRole("guest");
+      toast.error("Login failed");
     }
-
-    // Role based display logic missing
   };
 
   return (
