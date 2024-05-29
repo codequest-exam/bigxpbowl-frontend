@@ -80,8 +80,8 @@ function ReservationList({ setFormData, reservations, setReservations }:
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
               <td>{reservation.name}</td>
-              <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
+              <td>{reservation.participants}</td>
               <td>{reservation.date}</td>
               <td style={{whiteSpace:"pre"}}>
                 {reservation.activities.map((activity) => {

@@ -104,11 +104,8 @@ async function getMaintainables() {
   const res = await fetch(API_URL + "/maintenance/all").then(handleHttpErrors);
   const tempArray: Maintainable[] = []
   console.log(res);
-  
+  // Res is an object with 3 arrays of maintainables. We want to combine them into one array for easier handling
   for (const list in res) {
-    // tempArray.push(...list);
-    // console.log(list);
-    // console.log(res[list]);
     res[list].forEach((item: Maintainable) => {
       tempArray.push(item);
     });
