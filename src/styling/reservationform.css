@@ -48,6 +48,7 @@
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .reservation-form button[type="button"] {
@@ -81,7 +82,8 @@
   background-color: #218838;
 }
 
-.reservation-form button[type="reset"], .button-remove  {
+.reservation-form button[type="reset"],
+.button-remove {
   background-color: red;
   color: white;
   border: none;
@@ -93,7 +95,8 @@
   background-color: red;
 } */
 
-.reservation-form button[type="reset"]:hover, .button-remove:hover {
+.reservation-form button[type="reset"]:hover,
+.button-remove:hover {
   /* background-color: #218838; */
   opacity: 0.8;
   box-shadow: 1px 1px 4px black;
@@ -146,8 +149,7 @@
   margin-top: 5px;
 }
 
-
-.chosen-activity-container{
+.chosen-activity-container {
   margin: 5px;
   border: 1px black solid;
   border-collapse: collapse;
@@ -160,7 +162,5 @@
   border-image: initial;
   box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2);
 
-
   padding: 5px;
-
 }

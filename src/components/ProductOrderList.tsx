@@ -1,23 +1,23 @@
-import React from 'react';
-import '../styling/productorderlist.css';
+import React from "react";
+import "../styling/productorderlist.css";
 
 interface Product {
-        id: number;
-        name: string;
-        price: number;
+  id: number;
+  name: string;
+  price: number;
 }
 
 interface ProductOrderListProps {
-        products: Product[];
+  products: Product[];
 }
 
 const ProductOrderList: React.FC<ProductOrderListProps> = ({ products }) => {
-        // Hardcoded example products
-        const hardcodedProducts: Product[] = [
-                { id: 1, name: 'Cola', price: 10 },
-                { id: 2, name: 'Sprite', price: 20 },
-                { id: 3, name: 'Fanta', price: 30 },
-        ];
+  // Hardcoded example products
+  const hardcodedProducts: Product[] = [
+    { id: 1, name: "Cola", price: 10 },
+    { id: 2, name: "Sprite", price: 20 },
+    { id: 3, name: "Fanta", price: 30 },
+  ];
 
         return (
             <div className="order-list" style={{position: 'sticky', top: 80}}>

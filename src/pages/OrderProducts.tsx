@@ -2,8 +2,6 @@ import ProductCardView from "../components/ProductCardView";
 import ProductOrderList from "../components/ProductOrderList";
 
 export default function OrderProducts() {
-
-
   return (
     <>
       <div
@@ -13,8 +11,7 @@ export default function OrderProducts() {
           <ProductCardView />
         </div>
         <div>
-          <ProductOrderList
-        />
+          <ProductOrderList />
         </div>
       </div>
     </>

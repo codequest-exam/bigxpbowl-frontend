@@ -53,23 +53,10 @@ const initialWorkers: Workers = {
 
 const Schedule: React.FC<ScheduleProps> = () => {
   const [workers, setWorkers] = useState<Workers>(initialWorkers);
-  const days: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const days: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const hours: string[] = ["10:00-16:30", "16:30-23:00"];
 
-  const handleWorkerChange = (
-    day: string,
-    shiftType: string,
-    index: number,
-    newWorker: string
-  ) => {
+  const handleWorkerChange = (day: string, shiftType: string, index: number, newWorker: string) => {
     setWorkers((prevWorkers) => {
       const updatedWorkers = [...prevWorkers[day][shiftType].workers];
       updatedWorkers[index] = newWorker;
@@ -106,9 +93,7 @@ const Schedule: React.FC<ScheduleProps> = () => {
 
   const removeWorker = (day: string, shiftType: string, index: number) => {
     setWorkers((prevWorkers) => {
-      const updatedWorkers = prevWorkers[day][shiftType].workers.filter(
-        (_, i) => i !== index
-      );
+      const updatedWorkers = prevWorkers[day][shiftType].workers.filter((_, i) => i !== index);
 
       return {
         ...prevWorkers,
@@ -143,17 +128,7 @@ const Schedule: React.FC<ScheduleProps> = () => {
                   {shiftIndex === 0
                     ? workers[day].morning.workers.map((worker, index) => (
                         <div key={index} className="worker-select">
-                          <select
-                            value={worker}
-                            onChange={(e) =>
-                              handleWorkerChange(
-                                day,
-                                "morning",
-                                index,
-                                e.target.value
-                              )
-                            }
-                          >
+                          <select value={worker} onChange={(e) => handleWorkerChange(day, "morning", index, e.target.value)}>
                             <option value="">None</option>
                             {allStaffMembers.map((staffMember) => (
                               <option key={staffMember} value={staffMember}>
@@ -161,27 +136,14 @@ const Schedule: React.FC<ScheduleProps> = () => {
                               </option>
                             ))}
                           </select>
-                          <button
-                            className="remove-worker-button"
-                            onClick={() => removeWorker(day, "morning", index)}
-                          >
+                          <button className="remove-worker-button" onClick={() => removeWorker(day, "morning", index)}>
                             -
                           </button>
                         </div>
                       ))
                     : workers[day].evening.workers.map((worker, index) => (
                         <div key={index} className="worker-select">
-                          <select
-                            value={worker}
-                            onChange={(e) =>
-                              handleWorkerChange(
-                                day,
-                                "evening",
-                                index,
-                                e.target.value
-                              )
-                            }
-                          >
+                          <select value={worker} onChange={(e) => handleWorkerChange(day, "evening", index, e.target.value)}>
                             <option value="">None</option>
                             {allStaffMembers.map((staffMember) => (
                               <option key={staffMember} value={staffMember}>
@@ -189,20 +151,12 @@ const Schedule: React.FC<ScheduleProps> = () => {
                               </option>
                             ))}
                           </select>
-                          <button
-                            className="remove-worker-button"
-                            onClick={() => removeWorker(day, "evening", index)}
-                          >
+                          <button className="remove-worker-button" onClick={() => removeWorker(day, "evening", index)}>
                             -
                           </button>
                         </div>
                       ))}
-                  <button
-                    className="add-worker-button"
-                    onClick={() =>
-                      addWorker(day, shiftIndex === 0 ? "morning" : "evening")
-                    }
-                  >
+                  <button className="add-worker-button" onClick={() => addWorker(day, shiftIndex === 0 ? "morning" : "evening")}>
                     Add Worker
                   </button>
                 </td>

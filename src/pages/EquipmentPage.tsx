@@ -19,18 +19,20 @@ export default function EquipmentPage() {
 
   return (
     <div
-      style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw" }}
+      style={{
+        display: "flex",
+        margin: "1rem",
+        padding: "1vw",
+        gap: "2vw",
+        justifyContent: "space-evenly",
+      }}
     >
-      <div>
-        <EquipmentOrderForm
-          setFormData={setFormData}
-          formData={formData}
-          defaultFormObj={defaultFormObj}
-        />
-      </div>
-      <div>
-        <EquipmentList equipment={equipment} />
-      </div>
+      <EquipmentOrderForm
+        setFormData={setFormData}
+        formData={formData}
+        defaultFormObj={defaultFormObj}
+      />
+      <EquipmentList equipment={equipment} />
     </div>
   );
 }
