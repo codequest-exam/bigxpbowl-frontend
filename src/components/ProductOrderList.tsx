@@ -1,42 +1,53 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import "../styling/productorderlist.css";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
+import { Product } from "../interfaces/productInterface";
 
 interface ProductOrderListProps {
-  products: Product[];
+  orderList: Product[];
+  onSubmit: () => void;
+  removeFromOrder: (productId: number) => void;
 }
 
-const ProductOrderList: React.FC<ProductOrderListProps> = ({ products }) => {
-  // Hardcoded example products
-  const hardcodedProducts: Product[] = [
-    { id: 1, name: "Cola", price: 10 },
-    { id: 2, name: "Sprite", price: 20 },
-    { id: 3, name: "Fanta", price: 30 },
-  ];
+const ProductOrderList: React.FC<ProductOrderListProps> = ({ orderList, onSubmit, removeFromOrder }) => {
+    const [uniqueOrderList, setUniqueOrderList] = useState<Product[]>([]);
 
-        return (
-            <div className="order-list" style={{position: 'sticky', top: 80}}>
-                <h2>Hardcoded Product Order List</h2>
-                <ul>
-                    {hardcodedProducts.map((product) => (
+    useEffect(() => {
+      setUniqueOrderList(
+        Array.from(new Set(orderList.map((product) => product.id)))
+          .map((id) => orderList.find((product) => product.id === id))
+          .filter((product): product is Product => product !== undefined)
+      );
+    }, [orderList]);
+
+    return (
+        <div className="order-list" style={{ position: "sticky", top: 80 }}>
+            <h2>Beverages Order</h2>
+            <ul>
+                {uniqueOrderList.map((product) => {
+                    const quantity = orderList.filter((p) => p.id === product.id).length;
+                    
+                    return (
                         <li key={product.id} className="order-item">
                             <span className="order-item-name">{product.name}</span>
-                            <span className="order-item-quantity">1</span>
-                            <span className="order-item-price">{product.price},-</span>
+                            <span className="order-item-quantity">{quantity}</span>
+                            <span className="order-item-price">{product.price * quantity},-</span>
+                            <button onClick={() => removeFromOrder(product.id)}>
+                                Remove
+                            </button>
                         </li>
-                    ))}
-                    <li className="order-total">
-                        <span>Total</span>
-                        <span>{hardcodedProducts.reduce((total, product) => total + product.price, 0)},- dkk</span>
-                    </li>
-                </ul>
-            </div>
-        );
+                    );
+                })}
+                <li className="order-total">
+                    <span>Total</span>
+                    <span>
+                        {orderList.reduce((total, product) => total + product.price, 0)},-
+                        dkk
+                    </span>
+                </li>
+            </ul>
+            <button onClick={onSubmit}>Submit Order</button>
+        </div>
+    );
 };
 
 export default ProductOrderList;
