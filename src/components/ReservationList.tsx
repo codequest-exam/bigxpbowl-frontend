@@ -86,10 +86,9 @@ function ReservationList({ setFormData, reservations, setReservations }:
               <td style={{whiteSpace:"pre"}}>
                 {reservation.activities.map((activity) => {
                   return (
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-                    activity.substring(0, 1).toLocaleUpperCase() +
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-
+                    
+                    activity.substring(0, 1).toLocaleUpperCase()
+                    +
                     activity.substring(1).toLocaleLowerCase()
                     
                   );

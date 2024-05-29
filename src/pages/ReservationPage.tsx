@@ -13,7 +13,7 @@ import ReservationList from "../components/ReservationList";
   participants: 1,
   date: "",
   activityType: "",
-  startTime: "10:00",
+  startTime: "10:00:00",
   duration: "",
   amount: 1,
   activities: Array<ChosenActivityWithStringDates>(),

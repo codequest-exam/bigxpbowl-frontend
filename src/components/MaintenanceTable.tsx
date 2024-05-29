@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Maintainable } from "../pages/MaintenancePage";
+
 import { changeMaintenanceStatus } from "../services/apiFacade";
 import "../styling/schedule.css";
+import { Maintainable } from "../interfaces/equipmentInterface";
 
 export default function MaintenanceTable({
   maintainables,

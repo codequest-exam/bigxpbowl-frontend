@@ -3,18 +3,16 @@ import {
   ReservationListItem,
   ReservationWithStringDates,
   CompetitionDay,
+  AvailableForDay,
 } from "../interfaces/reservationInterface.ts";
 import { Product } from "../interfaces/productInterface.ts";
-import { Equipment } from "../interfaces/equipmentInterface.ts";
+import { Equipment, Maintainable } from "../interfaces/equipmentInterface.ts";
 import { API_URL } from "../settings.ts";
-import { Maintainable } from "../pages/MaintenancePage.tsx";
+
+
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations").then(handleHttpErrors);
-  // const data = await fetch(API_URL + "/reservations");
-  // const reservations = await data.json();
-  // console.log(reservations);
-  // return reservations;
 }
 
 async function getAvailableSlots(
@@ -32,6 +30,11 @@ async function getAvailableSlots(
   console.log(result);
   return result;
 }
+
+
+  async function getAvailableForDay(day: string) : Promise<AvailableForDay> {
+    return await fetch(API_URL + "/activities/available/" + day).then(handleHttpErrors);
+  }
 
 async function getProducts(): Promise<Array<Product>> {
   return fetch(API_URL + "/products").then(handleHttpErrors);
@@ -175,4 +178,5 @@ export {
   getAvailableSlots,
   getMaintainables,
   changeMaintenanceStatus,
+  getAvailableForDay,
 };
