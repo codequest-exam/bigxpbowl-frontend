@@ -10,7 +10,11 @@ interface ProductListProps {
   onEdit: (product: Product) => void;
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, setProducts, onEdit }) => {
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  setProducts,
+  onEdit,
+}) => {
   const handleDelete = async (id: number | undefined) => {
     if (id === undefined) {
       console.error("Cannot delete product: id is undefined");
@@ -46,12 +50,18 @@ const ProductList: React.FC<ProductListProps> = ({ products, setProducts, onEdit
           {products.map((product) => (
             <tr key={product.id}>
               <td>{product.name}</td>
-              <td>{product.price}</td>
+              <td>{product.price}DKK</td>
               <td>
-                <button className="edit-button" onClick={() => handleEdit(product)}>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(product)}
+                >
                   Edit
                 </button>
-                <button className="delete-button" onClick={() => handleDelete(product.id)}>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(product.id)}
+                >
                   Delete
                 </button>
               </td>
