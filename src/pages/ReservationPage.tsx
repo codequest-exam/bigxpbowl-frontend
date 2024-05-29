@@ -6,7 +6,7 @@ import ReservationList from "../components/ReservationList";
 
 
 
- const defaultFormObj = {
+ const defaultFormObj : ReservationFormData = {
   id: 0,
   name: "",
   phoneNumber: "",

@@ -22,12 +22,11 @@ export default function ReservationForm({
   const [availableTimes, setAvailableTimes] = useState<AvailableForDay>({} as AvailableForDay);
 
   useEffect(() => {
-    getAvailableSlots()
+    getAvailableSlots();
   }, [formData.date]);
 
   async function getAvailableSlots() {
     if (formData.date) {
-      
       setAvailableTimes(await getAvailableForDay(formData.date));
     } else {
       setAvailableTimes({} as AvailableForDay);
@@ -179,6 +178,8 @@ export default function ReservationForm({
     let availableAtTime = availableTimes[formData.activityType].find((time) => {
       return time.hour === formData.startTime;
     })?.amountAvailable;
+    console.log("availableAtTime:" + availableAtTime);
+    
 
     let optionalAvailable = availableAtTime;
     if (formData.duration === "2") {
@@ -186,7 +187,8 @@ export default function ReservationForm({
         return time.hour === convertStartStringToEndString(formData.startTime);
       })?.amountAvailable;
     }
-
+    console.log("optionalAvailable:" + optionalAvailable);
+    
     if (availableAtTime === undefined) {
       return ErrorOptionArray();
     }
@@ -195,9 +197,15 @@ export default function ReservationForm({
     // make sure you can't reserve more than 4 lanes or tables
     availableAtTime = availableAtTime > 4 ? 4 : availableAtTime;
     console.log("availableAtTime available:" + availableAtTime);
-
-    if (availableAtTime === 0) {
-      return ErrorOptionArray("No lanes or tables available at this time");
+    if (formData.amount > availableAtTime) {
+      setFormData((prevFormData) => ({ ...prevFormData, amount: availableAtTime }));
+    }
+    if (availableAtTime <= 0) {
+      console.log("returning error");
+      
+      return ErrorOptionArray(`No ${formData.activityType == "AIRHOCKEY" || formData.activityType == "DINING" ? "tables" : "lanes"} available at this time`);
+    } else if (formData.amount == 0) {
+      setFormData((prevFormData) => ({ ...prevFormData, amount: 1 }));
     }
 
     const options = [];
@@ -213,7 +221,7 @@ export default function ReservationForm({
   }
 
   function activityAllowed(): boolean {
-    return formData.activityType !== "" && formData.startTime !== "" && formData.duration !== "" && formData.date !== "";
+    return formData.activityType !== "" && formData.startTime !== "" && formData.duration !== "" && formData.date !== "" && formData.amount > 0;
   }
 
   function submitAllowed(): boolean {
@@ -257,6 +265,18 @@ export default function ReservationForm({
 
   function normalizeName(name: string): string {
     return name.substring(0, 1).toLocaleUpperCase() + name.substring(1).toLocaleLowerCase();
+  }
+
+  function secondHourAllowed(): boolean {
+    if (availableTimes[formData.activityType] === undefined) {
+      return false;
+    }
+      const availableNextHour = availableTimes[formData.activityType].find((e) => 1 + Number(e.hour.substring(0, 2)) + e.hour.substring(3) === formData.startTime);
+    if (availableNextHour === undefined) {
+
+      return false;
+    }
+    return formData.startTime != "22:00:00" && availableNextHour?.amountAvailable <= 0;
   }
 
   return (
@@ -319,7 +339,7 @@ export default function ReservationForm({
             <select name="duration" value={formData.duration} onChange={handleInputChange} disabled={!formData.startTime}>
               <option value="">Select duration</option>
               <option value="1">1 hour</option>
-              <option value="2" disabled={formData.startTime == "22:00:00"}>
+              <option value="2" disabled={secondHourAllowed()}>
                 2 hours
               </option>
             </select>

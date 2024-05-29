@@ -12,7 +12,15 @@ import { API_URL } from "../settings.ts";
 
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
-  return fetch(API_URL + "/reservations").then(handleHttpErrors);
+
+  
+  return fetch(API_URL + "/reservations/all").then(handleHttpErrors);
+}
+
+async function getReservationsPaginated(page: number): Promise<Array<ReservationListItem>> {
+  console.log("current page", page);
+  
+  return fetch(API_URL + "/reservations/all/" + page).then(handleHttpErrors);
 }
 
 async function getAvailableSlots(
@@ -33,7 +41,10 @@ async function getAvailableSlots(
 
 
   async function getAvailableForDay(day: string) : Promise<AvailableForDay> {
-    return await fetch(API_URL + "/activities/available/" + day).then(handleHttpErrors);
+    const res = await fetch(API_URL + "/activities/available/" + day).then(handleHttpErrors);
+    console.log(res);
+    return res
+    
   }
 
 async function getProducts(): Promise<Array<Product>> {
@@ -179,4 +190,5 @@ export {
   getMaintainables,
   changeMaintenanceStatus,
   getAvailableForDay,
+  getReservationsPaginated,
 };

@@ -74,7 +74,7 @@ export interface ReservationFormData {
   name: string;
   phoneNumber: string;
   participants: number;
-  activityType: string;
+  activityType: "" |"DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING" ;
   amount: number;
   date: string;
   startTime: string;
