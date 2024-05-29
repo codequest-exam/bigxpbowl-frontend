@@ -118,7 +118,7 @@ async function getMaintainables() {
 async function changeMaintenanceStatus(maintainable: Maintainable) {
   console.log("maintainable", maintainable);
   
-  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
+  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType == "CHILDBOWLING" ? "BOWLING" : maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
 
 }
 

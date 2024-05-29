@@ -25,7 +25,7 @@ export interface Maintainable {
   tableNumber?: number;
   maintenance: boolean;
   childFriendly?: boolean;
-  activityType: "DINING" | "BOWLING" | "AIRHOCKEY";
+  activityType: "DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING";
 }
 
 

@@ -53,6 +53,9 @@ export default function MaintenanceTable({
             <button onClick={() => handleActivityFilterChange("BOWLING")}>
               Bowling
             </button>
+            <button onClick={() => handleActivityFilterChange("CHILDBOWLING")}>
+              Child bowling
+            </button>
             <button onClick={() => handleActivityFilterChange("AIRHOCKEY")}>
               Air Hockey
             </button>
