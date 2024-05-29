@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styling/reservationform.css";
-import { ChosenActivityWithStringDates, ReservationFormData, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
+import {
+  ChosenActivityWithStringDates,
+  ReservationFormData,
+  ReservationListItem,
+  ReservationWithStringDates,
+} from "../interfaces/reservationInterface";
 
-import { getReservations, submitReservation } from "../services/apiFacade";
+import { getReservations, submitReservation, getAvailableSlots } from "../services/apiFacade.ts";
 
 export default function ReservationForm({
   setFormData,
   formData,
   setReservations,
-  defaultFormObj
+  defaultFormObj,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
   formData: ReservationFormData;
@@ -16,6 +21,15 @@ export default function ReservationForm({
   defaultFormObj: ReservationFormData;
 }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [freeSlots, setFreeSlots] = useState<number>(10);
+
+  useEffect(() => {
+    async function update() {
+      const free = await getFree();
+      setFreeSlots(free);
+    }
+    update();
+  }, [formData.date, formData.startTime, formData.duration, formData.activityType, formData.amount]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +38,7 @@ export default function ReservationForm({
       name: formData.name,
       phoneNumber: formData.phoneNumber,
       participants: +formData.participants,
-      activities: formData.activities.map((activity) => ({ ...activity, date: formData.date })),
+      activities: formData.activities.map(activity => ({ ...activity, date: formData.date })),
     };
 
     if (formData.id) {
@@ -35,17 +49,14 @@ export default function ReservationForm({
     console.log("FINAL FORM DATA", formData);
     for (const key in newReservation) {
       if (newReservation[key] === "") {
-        
         setErrorMessage(`Please fill out ${key}`);
         return;
       }
-
     }
     if (newReservation.activities.length === 0) {
       setErrorMessage("Please add an activity");
       return;
     }
-
 
     await submitReservation(newReservation);
     setFormData(defaultFormObj);
@@ -56,7 +67,7 @@ export default function ReservationForm({
     const { name, value } = e.target;
     console.log(name, value);
 
-    setFormData((prevFormData) => ({
+    setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value,
     }));
@@ -72,7 +83,7 @@ export default function ReservationForm({
       date: formData.date !== "",
     };
 
-    if (formData.activities.filter((activity) => activity.activityType === formData.activityType).length !== 0) {
+    if (formData.activities.filter(activity => activity.activityType === formData.activityType).length !== 0) {
       console.log("FIRST ERROR");
 
       setErrorMessage("Activity already added");
@@ -82,7 +93,7 @@ export default function ReservationForm({
 
       const s = formData.startTime;
 
-      setFormData((prevFormData) => ({
+      setFormData(prevFormData => ({
         ...prevFormData,
         activities: [
           ...prevFormData.activities,
@@ -90,11 +101,11 @@ export default function ReservationForm({
             activityType: formData.activityType,
             amountBooked: formData.activityType == "DINING" ? 1 : formData.amount,
             startTime: s,
-            endTime: Number(s.substring(0, 2)) + 2 + ":" + s.substring(3),
+            endTime: convertStartStringToEndString(s),
             date: formData.date,
           },
         ],
-        // activity: "",
+        activityType: "",
         // startTime: "",
         // duration: "",
       }));
@@ -105,24 +116,89 @@ export default function ReservationForm({
       setErrorMessage(
         "Please fill out " +
           Object.keys(checks)
-            .filter((key) => !checks[key])
+            .filter(key => !checks[key])
             .join(" & ")
       );
     }
   };
 
+  function convertStartStringToEndString(startTime: string) {
+    return Number(startTime.substring(0, 2)) + +formData.duration + ":" + startTime.substring(3);
+  }
+
   const handleRemoveActivity = (chosenActivity: ChosenActivityWithStringDates) => {
-    setFormData((prevFormData) => ({
+    setFormData(prevFormData => ({
       ...prevFormData,
-      activities: prevFormData.activities.filter((activity) => activity.activityType !== chosenActivity.activityType),
+      activities: prevFormData.activities.filter(activity => activity.activityType !== chosenActivity.activityType),
     }));
   };
+
+  function generateOptions() {
+    const options = [];
+    const slots = freeSlots > 4 ? 4 : freeSlots;
+    if (slots == -1) {
+      options.push(
+        <option key={0} value={0}>
+          Loading...
+        </option>
+      );
+    } else {
+      for (let i = 1; i <= slots; i++) {
+        options.push(
+          <option key={i} value={i}>
+            {i}
+          </option>
+        );
+      }
+    }
+    return options;
+  }
+
+  async function getFree() {
+    if (formData.date && formData.startTime && formData.duration && formData.activityType) {
+      console.log("GETTING FREE SLOTS");
+
+      return await getAvailableSlots(formData.date, formData.startTime, convertStartStringToEndString(formData.startTime), formData.activityType);
+    } else {
+      console.log("NO FREE SLOTS");
+      return freeSlots;
+    }
+  }
+
+  function allowedToAdd(): boolean {
+    // console.log("free slots", freeSlots);
+    // console.log("amount", formData.amount);
+    
+    // console.log("ALLOWED?", res);
+    
+    const res = freeSlots >= formData.amount;
+    return res;
+  }
 
   return (
     <div className="reservation-form-page">
       <h2 className="reservation-header">Add New Reservation</h2>
       <div className="reservation-form-container">
         <form className="reservation-form" onSubmit={handleFormSubmit}>
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "center",
+            }}
+          >
+            <button type="submit">{formData.id ? "Update" : "Submit"}</button>
+
+            <button type="reset" onClick={() => setFormData(defaultFormObj)}>
+              Reset
+            </button>
+
+            {/* {formData.id && (
+              <button type="reset" onClick={() => setFormData(defaultFormObj)}>
+                Reset
+              </button>
+            )} */}
+          </div>
           <label>
             Name:
             <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
@@ -148,21 +224,8 @@ export default function ReservationForm({
               <option value="AIRHOCKEY">Air Hockey</option>
               <option value="DINING">Dining</option>
             </select>
-            <button type="button" onClick={handleAddActivity}>
-              Add
-            </button>
           </label>
-          {formData.activityType && formData.activityType !== "DINING" && (
-            <label>
-              How many {formData.activityType == "AIRHOCKEY" ? "tables" : "lanes"}
-              <select name="amount" id="" onChange={handleInputChange}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-            </label>
-          )}
+
           <label>
             Start Time:
             <select name="startTime" onChange={handleInputChange}>
@@ -189,28 +252,29 @@ export default function ReservationForm({
               <option value="2">2 hours</option>
             </select>
           </label>
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              justifyContent: "center",
-            }}
-          >
-            <button type="submit">{formData.id ? "Update" : "Submit"}</button>
-            {formData.id && (
-              <button type="reset" onClick={() => setFormData(defaultFormObj)}>
-                Reset
-              </button>
-            )}
-          </div>
+          {freeSlots != -1 && formData.activityType && formData.activityType !== "DINING" && (
+            <label>
+              How many {formData.activityType == "AIRHOCKEY" ? "tables" : "lanes"}
+              <select name="amount" id="" onChange={handleInputChange}>
+                {generateOptions().map(option => option)}
+              </select>
+            </label>
+          )}
+          {/* {formData.activityType && formData.startTime && formData.duration && formData.date && (
+          )} */}
+            <button type="button" onClick={handleAddActivity} disabled={!allowedToAdd()} className="test">
+              {allowedToAdd() ? "Add activity " : "No room at the given time"}
+            </button>
         </form>
+
         <div className="chosen-activities">
           <h3>Chosen Activities:</h3>
+          <div>Free slots: {freeSlots}</div>
           <h4 className="error-message">{errorMessage && <p>{errorMessage}</p>}</h4>
 
           <ul>
-            {formData.activities.map((chosenActivity) => (
-              <div key={chosenActivity.activityType}>
+            {formData.activities.map(chosenActivity => (
+              <div key={chosenActivity.activityType} className="chosen-activity-container">
                 <li>Activity: {chosenActivity.activityType.charAt(0) + chosenActivity.activityType.substring(1).toLocaleLowerCase()}</li>
                 <li>Start time: {chosenActivity.startTime.substring(0, 5)}</li>
                 <li>End time: {chosenActivity.endTime.substring(0, 5)}</li>
@@ -220,7 +284,7 @@ export default function ReservationForm({
                   </li>
                 )}
 
-                <button type="button" onClick={() => handleRemoveActivity(chosenActivity)}>
+                <button type="button" className="button-remove" onClick={() => handleRemoveActivity(chosenActivity)}>
                   Remove
                 </button>
               </div>

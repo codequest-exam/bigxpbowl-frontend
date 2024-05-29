@@ -1,6 +1,6 @@
 import { useEffect} from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
+import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -83,17 +83,17 @@ function ReservationList({ setFormData, reservations, setReservations }:
               <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
               <td>{reservation.date}</td>
-              <td>
+              <td style={{whiteSpace:"pre"}}>
                 {reservation.activities.map((activity) => {
                   return (
                     //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-                    activity.substring(0, 1) +
+                    activity.substring(0, 1).toLocaleUpperCase() +
                     //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
 
-                    activity.substring(1).toLocaleLowerCase() +
-                    "\n"
+                    activity.substring(1).toLocaleLowerCase()
+                    
                   );
-                })}
+                }).join("\n")}
               </td>
               <td>
                 <button className="edit-button" onClick={() => handleEdit(reservation.id)}>

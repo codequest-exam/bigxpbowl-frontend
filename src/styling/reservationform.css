@@ -48,6 +48,7 @@
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .reservation-form button[type="button"] {
@@ -72,12 +73,17 @@
   border-radius: 4px;
   cursor: pointer;
 }
+.reservation-form button[type="button"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 
 .reservation-form button[type="submit"]:hover {
   background-color: #218838;
 }
 
-.reservation-form button[type="reset"] {
+.reservation-form button[type="reset"],
+.button-remove {
   background-color: red;
   color: white;
   border: none;
@@ -85,8 +91,15 @@
   cursor: pointer;
 }
 
-.reservation-form button[type="reset"]:hover {
-  background-color: #218838;
+/* .button-remove{
+  background-color: red;
+} */
+
+.reservation-form button[type="reset"]:hover,
+.button-remove:hover {
+  /* background-color: #218838; */
+  opacity: 0.8;
+  box-shadow: 1px 1px 4px black;
 }
 
 .chosen-activities {
@@ -109,7 +122,7 @@
 }
 
 .chosen-activities ul li {
-  color: black;
+  /* color: black; */
   padding: 8px 0;
   display: flex;
   justify-content: space-between;
@@ -134,4 +147,20 @@
   color: red;
 
   margin-top: 5px;
+}
+
+.chosen-activity-container {
+  margin: 5px;
+  border: 1px black solid;
+  border-collapse: collapse;
+  /* make the borders look good */
+  border-spacing: 0;
+  border-radius: 5px;
+  border-color: #333;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2);
+
+  padding: 5px;
 }
