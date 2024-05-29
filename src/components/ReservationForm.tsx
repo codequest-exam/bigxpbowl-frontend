@@ -3,6 +3,7 @@ import "../styling/reservationform.css";
 import { AvailableForDay, ChosenActivityWithStringDates, ReservationFormData, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
 
 import { getReservations, submitReservation, getAvailableForDay } from "../services/apiFacade.ts";
+// import ErrorOption from "./ErrorOption.tsx";
 
 export default function ReservationForm({
   setFormData,
@@ -21,20 +22,15 @@ export default function ReservationForm({
   const [availableTimes, setAvailableTimes] = useState<AvailableForDay>({} as AvailableForDay);
 
   useEffect(() => {
-    async function update() {
-      setAvailableTimes(await getAvailableSlots());
-      // const free = await getFree();
-      // setFreeSlots(free);
-    }
-    update();
+    getAvailableSlots()
   }, [formData.date]);
 
   async function getAvailableSlots() {
     if (formData.date) {
-      console.log("getting new slots cos day changed");
-      return await getAvailableForDay(formData.date);
+      
+      setAvailableTimes(await getAvailableForDay(formData.date));
     } else {
-      return {} as AvailableForDay;
+      setAvailableTimes({} as AvailableForDay);
     }
   }
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -72,7 +68,9 @@ export default function ReservationForm({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(name, value);
-
+    if (name === "startTime" && value == "22:00:00") {
+      setFormData((prevFormData) => ({ ...prevFormData, duration: "1" }));
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -139,14 +137,18 @@ export default function ReservationForm({
     }));
   };
 
-  function generateTimes() {
-    const times = [
+  function ErrorOptionArray(message = "Fill out the other fields") {
+    return [
       <option key={0} value={""}>
-        Select a time
+        {message}
       </option>,
     ];
+  }
+
+  function generateTimes() {
+    const times = ErrorOptionArray("Select a time");
     if (availableTimes[formData.activityType] === undefined) {
-      return [times];
+      return times;
     }
 
     for (const time of availableTimes[formData.activityType]) {
@@ -158,70 +160,48 @@ export default function ReservationForm({
         );
       }
     }
+
     if (times.length === 1) {
       if (formData.startTime !== "") {
         setFormData((prevFormData) => ({ ...prevFormData, startTime: "" }));
       }
-
-      return [
-        <option key={0} value={""}>
-          No times available on this day
-        </option>,
-      ];
+      return ErrorOptionArray("No available times for this activity");
     }
+
     return times;
   }
 
   function generateAmountOptions() {
-    const emergencyReturn = [
-      <option key={0} value={""}>
-        Fill out the other fields
-      </option>,
-    ];
-
     if (availableTimes[formData.activityType] === undefined) {
-      // console.log("couldn't find activitytype in availableTimes");
-      return emergencyReturn;
+      return ErrorOptionArray();
     }
 
-    const availableAtTime = availableTimes[formData.activityType].find((time) => {
+    let availableAtTime = availableTimes[formData.activityType].find((time) => {
       return time.hour === formData.startTime;
     })?.amountAvailable;
 
-    let secondAvailableAtTime;
+    let optionalAvailable = availableAtTime;
     if (formData.duration === "2") {
-      secondAvailableAtTime = availableTimes[formData.activityType].find((time) => {
+      optionalAvailable = availableTimes[formData.activityType].find((time) => {
         return time.hour === convertStartStringToEndString(formData.startTime);
       })?.amountAvailable;
     }
 
     if (availableAtTime === undefined) {
-      // console.log("couldn't find time in availableTimes");
-      return emergencyReturn;
+      return ErrorOptionArray();
     }
+    // set available time to the highest of the two
+    availableAtTime = optionalAvailable && optionalAvailable < availableAtTime ? optionalAvailable : availableAtTime;
+    // make sure you can't reserve more than 4 lanes or tables
+    availableAtTime = availableAtTime > 4 ? 4 : availableAtTime;
+    console.log("availableAtTime available:" + availableAtTime);
 
-    console.log("available at time:" + availableAtTime);
-    console.log("second available at time:" + secondAvailableAtTime);
-
-    let timeSlots = 0;
-    if (secondAvailableAtTime) {
-      timeSlots = availableAtTime < secondAvailableAtTime ? availableAtTime : secondAvailableAtTime;
-    } else {
-      timeSlots = availableAtTime;
-    }
-    timeSlots > 4 ? (timeSlots = 4) : timeSlots;
-    console.log("timeslots available:" + timeSlots);
-
-    if (timeSlots === 0) {
-      return [
-        <option key={0} value={""}>
-          No lanes/tables available at this time
-        </option>,
-      ];
+    if (availableAtTime === 0) {
+      return ErrorOptionArray("No lanes or tables available at this time");
     }
 
     const options = [];
-    for (let i = 1; i <= timeSlots; i++) {
+    for (let i = 1; i <= availableAtTime; i++) {
       options.push(
         <option key={i} value={i}>
           {i}
@@ -247,8 +227,6 @@ export default function ReservationForm({
         }
       }
     }
-    console.log("valid activities");
-
     return formData.name !== "" && formData.phoneNumber !== "" && formData.participants > 0 && formData.activities.length > 0;
   }
 
@@ -256,9 +234,8 @@ export default function ReservationForm({
     if (availableTimes[activity.activityType] === undefined) {
       return false;
     }
-
     for (const time of availableTimes[activity.activityType]) {
-      if (time.hour === activity.startTime || (time.hour < activity.endTime && time.hour > activity.startTime)) {
+      if (timeOverlaps(activity, time)) {
         if (time.amountAvailable < activity.amountBooked) {
           const newError = "Not enough slots available for " + normalizeName(activity.activityType);
           if (errorMessage !== newError) {
@@ -272,6 +249,10 @@ export default function ReservationForm({
       setErrorMessage("");
     }
     return true;
+  }
+
+  function timeOverlaps(activity: ChosenActivityWithStringDates, time: { hour: string }) {
+    return time.hour === activity.startTime || (time.hour < activity.endTime && time.hour > activity.startTime);
   }
 
   function normalizeName(name: string): string {
@@ -338,7 +319,7 @@ export default function ReservationForm({
             <select name="duration" value={formData.duration} onChange={handleInputChange} disabled={!formData.startTime}>
               <option value="">Select duration</option>
               <option value="1">1 hour</option>
-              <option value="2" disabled={formData.startTime == "22:00"}>
+              <option value="2" disabled={formData.startTime == "22:00:00"}>
                 2 hours
               </option>
             </select>
@@ -348,7 +329,7 @@ export default function ReservationForm({
             <label>
               How many {formData.activityType == "AIRHOCKEY" ? "tables" : "lanes"}
               <select name="amount" id="" onChange={handleInputChange} disabled={!formData.startTime || !formData.activityType || !formData.date || !formData.duration}>
-                {generateAmountOptions().map((option) => option)}
+                {generateAmountOptions()}
               </select>
             </label>
           )}
