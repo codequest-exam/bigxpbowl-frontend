@@ -3,7 +3,6 @@ import EquipmentOrderForm from "../components/EquipmentOrderForm";
 import EquipmentList from "../components/EquipmentList";
 import { Equipment, EquipmentFormData } from "../interfaces/equipmentInterface";
 import { getEquipment } from "../services/apiFacade.ts";
-import "../styling/equipmentpage.css";
 
 export default function EquipmentPage() {
   const defaultFormObj: EquipmentFormData = { id: 0, name: "", stock: 0 };
@@ -19,8 +18,20 @@ export default function EquipmentPage() {
   }, []);
 
   return (
-    <div style={{ display: "flex", margin: "1rem", padding: "1vw", gap: "2vw", justifyContent: "space-evenly" }}>
-      <EquipmentOrderForm setFormData={setFormData} formData={formData} defaultFormObj={defaultFormObj} />
+    <div
+      style={{
+        display: "flex",
+        margin: "1rem",
+        padding: "1vw",
+        gap: "2vw",
+        justifyContent: "space-evenly",
+      }}
+    >
+      <EquipmentOrderForm
+        setFormData={setFormData}
+        formData={formData}
+        defaultFormObj={defaultFormObj}
+      />
       <EquipmentList equipment={equipment} />
     </div>
   );

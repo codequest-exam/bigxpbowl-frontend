@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styling/equipmentorderform.css";
 import { EquipmentFormData } from "../interfaces/equipmentInterface";
 import { getEquipment } from "../services/apiFacade.ts";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function EquipmentOrderForm({
@@ -44,7 +44,6 @@ export default function EquipmentOrderForm({
 
   return (
     <div className="equipment-form-page">
-      <ToastContainer />
       <h2 className="equipment-header">Order Equipment</h2>
       <div className="equipment-form-container">
         <form className="equipment-form" onSubmit={handleFormSubmit}>
