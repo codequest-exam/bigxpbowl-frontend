@@ -6,7 +6,7 @@ import About from "./components/About";
 // import ReservationList from "./components/ReservationList";
 import ReservationPage from "./pages/ReservationPage";
 import Calendar from "./pages/Calendar";
-import Schedule from "./components/Schedule";
+import Schedule from "./components/ShiftSchedule";
 import OrderProducts from "./pages/OrderProducts";
 import ProductPage from "./pages/ProductPage";
 import EquipmentPage from "./pages/EquipmentPage";

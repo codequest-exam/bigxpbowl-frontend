@@ -1,9 +1,4 @@
-import {
-  RecurringReservation,
-  ReservationListItem,
-  ReservationWithStringDates,
-  CompetitionDay,
-} from "../interfaces/reservationInterface.ts";
+import { RecurringReservation, ReservationListItem, ReservationWithStringDates, CompetitionDay } from "../interfaces/reservationInterface.ts";
 import { Product } from "../interfaces/productInterface.ts";
 import { Equipment } from "../interfaces/equipmentInterface.ts";
 import { API_URL } from "../settings.ts";
@@ -17,12 +12,7 @@ async function getReservations(): Promise<Array<ReservationListItem>> {
   // return reservations;
 }
 
-async function getAvailableSlots(
-  date: string,
-  startTime: string,
-  endTime: string,
-  activityType: string
-): Promise<number> {
+async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
   const reqObj = { date, startTime, endTime, activityType };
   console.log(reqObj);
 
@@ -50,38 +40,25 @@ async function deleteProduct(id: number) {
   return response.status;
 }
 
-async function getSingleReservation(
-  id: number
-): Promise<ReservationWithStringDates> {
-  const reservation = await fetch(API_URL + "/reservations/" + id).then(
-    handleHttpErrors
-  );
+async function getSingleReservation(id: number): Promise<ReservationWithStringDates> {
+  const reservation = await fetch(API_URL + "/reservations/" + id).then(handleHttpErrors);
   console.log(reservation);
 
   return reservation;
 }
 
-async function getRecurringReservations(): Promise<
-  Array<RecurringReservation>
-> {
+async function getRecurringReservations(): Promise<Array<RecurringReservation>> {
   return fetch(API_URL + "/reservations/recurring").then(handleHttpErrors);
 }
 
 async function getCompetitionDays(): Promise<Array<CompetitionDay>> {
-  const competitionDays = await fetch(
-    API_URL + "/reservations/competition-day"
-  ).then(handleHttpErrors);
+  const competitionDays = await fetch(API_URL + "/reservations/competition-day").then(handleHttpErrors);
   return competitionDays;
 }
 
 async function submitReservation(newReservation: ReservationWithStringDates) {
-  const URL = newReservation.id
-    ? API_URL + "/reservations/" + newReservation.id
-    : API_URL + "/reservations";
-  const options = makeOptions(
-    newReservation.id ? "PUT" : "POST",
-    newReservation
-  );
+  const URL = newReservation.id ? API_URL + "/reservations/" + newReservation.id : API_URL + "/reservations";
+  const options = makeOptions(newReservation.id ? "PUT" : "POST", newReservation);
   return await fetch(URL, options).then(handleHttpErrors);
 }
 
@@ -102,9 +79,9 @@ async function updateEquipment(id: number, equipment: Equipment) {
 
 async function getMaintainables() {
   const res = await fetch(API_URL + "/maintenance/all").then(handleHttpErrors);
-  const tempArray: Maintainable[] = []
+  const tempArray: Maintainable[] = [];
   console.log(res);
-  
+
   for (const list in res) {
     // tempArray.push(...list);
     // console.log(list);
@@ -112,17 +89,19 @@ async function getMaintainables() {
     res[list].forEach((item: Maintainable) => {
       tempArray.push(item);
     });
-    
   }
-  console.log("tempArray", tempArray);  
+  console.log("tempArray", tempArray);
   return tempArray;
+}
+
+async function getShifts() {
+  return fetch(`${API_URL}/shifts`).then(handleHttpErrors);
 }
 
 async function changeMaintenanceStatus(maintainable: Maintainable) {
   console.log("maintainable", maintainable);
-  
-  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
 
+  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
 }
 
 function makeOptions(method: string, body: object | null): RequestInit {
@@ -178,4 +157,5 @@ export {
   getAvailableSlots,
   getMaintainables,
   changeMaintenanceStatus,
+  getShifts,
 };
