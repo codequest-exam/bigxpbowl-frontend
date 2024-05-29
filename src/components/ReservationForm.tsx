@@ -16,6 +16,7 @@ export default function ReservationForm({
   defaultFormObj: ReservationFormData;
 }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  // const [notAllowedMessage, setNotAllowedMessage] = useState<string>("Fill out the fields first");
   // const [freeSlots, setFreeSlots] = useState<number>(10);
   const [availableTimes, setAvailableTimes] = useState<AvailableForDay>({} as AvailableForDay);
 
@@ -28,6 +29,14 @@ export default function ReservationForm({
     update();
   }, [formData.date]);
 
+  async function getAvailableSlots() {
+    if (formData.date) {
+      console.log("getting new slots cos day changed");
+      return await getAvailableForDay(formData.date);
+    } else {
+      return {} as AvailableForDay;
+    }
+  }
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // of type ReservationWithStringDates:
@@ -163,7 +172,7 @@ export default function ReservationForm({
     return times;
   }
 
-  function generateLanes() {
+  function generateAmountOptions() {
     const emergencyReturn = [
       <option key={0} value={""}>
         Fill out the other fields
@@ -171,7 +180,7 @@ export default function ReservationForm({
     ];
 
     if (availableTimes[formData.activityType] === undefined) {
-      console.log("couldn't find activitytype in availableTimes");
+      // console.log("couldn't find activitytype in availableTimes");
       return emergencyReturn;
     }
 
@@ -187,23 +196,22 @@ export default function ReservationForm({
     }
 
     if (availableAtTime === undefined) {
-      console.log("couldn't find time in availableTimes");
+      // console.log("couldn't find time in availableTimes");
       return emergencyReturn;
     }
 
     console.log("available at time:" + availableAtTime);
     console.log("second available at time:" + secondAvailableAtTime);
-    
+
     let timeSlots = 0;
     if (secondAvailableAtTime) {
       timeSlots = availableAtTime < secondAvailableAtTime ? availableAtTime : secondAvailableAtTime;
-    } 
-     else {
+    } else {
       timeSlots = availableAtTime;
     }
     timeSlots > 4 ? (timeSlots = 4) : timeSlots;
     console.log("timeslots available:" + timeSlots);
-    
+
     if (timeSlots === 0) {
       return [
         <option key={0} value={""}>
@@ -224,17 +232,50 @@ export default function ReservationForm({
     return options;
   }
 
-  async function getAvailableSlots() {
-    if (formData.date) {
-      console.log("getting new slots cos day changed");
-      return await getAvailableForDay(formData.date);
-    } else {
-      return {} as AvailableForDay;
-    }
+  function activityAllowed(): boolean {
+    return formData.activityType !== "" && formData.startTime !== "" && formData.duration !== "" && formData.date !== "";
   }
 
-  function allowedToAdd(): boolean {
-    return formData.activityType !== "" && formData.startTime !== "" && formData.duration !== "" && formData.date !== "";
+  function submitAllowed(): boolean {
+    // Only run the check on activities if the date has changed - they all share the same date, can just check the first
+    if (formData.date !== formData.activities[0]?.date) {
+      for (const activity of formData.activities) {
+        const response = validActivity(activity);
+        if (response === false) {
+          console.log("not valid activity");
+          return false;
+        }
+      }
+    }
+    console.log("valid activities");
+
+    return formData.name !== "" && formData.phoneNumber !== "" && formData.participants > 0 && formData.activities.length > 0;
+  }
+
+  function validActivity(activity: ChosenActivityWithStringDates): boolean {
+    if (availableTimes[activity.activityType] === undefined) {
+      return false;
+    }
+
+    for (const time of availableTimes[activity.activityType]) {
+      if (time.hour === activity.startTime || (time.hour < activity.endTime && time.hour > activity.startTime)) {
+        if (time.amountAvailable < activity.amountBooked) {
+          const newError = "Not enough slots available for " + normalizeName(activity.activityType);
+          if (errorMessage !== newError) {
+            setErrorMessage(newError);
+          }
+          return false;
+        }
+      }
+    }
+    if (errorMessage !== "") {
+      setErrorMessage("");
+    }
+    return true;
+  }
+
+  function normalizeName(name: string): string {
+    return name.substring(0, 1).toLocaleUpperCase() + name.substring(1).toLocaleLowerCase();
   }
 
   return (
@@ -249,7 +290,10 @@ export default function ReservationForm({
               justifyContent: "center",
             }}
           >
-            <button type="submit">{formData.id ? "Update" : "Submit"}</button>
+            <button type="submit" disabled={!submitAllowed()}>
+              {/* {formData.id ? "Update" : "Submit"} */}
+              {!submitAllowed() ? "Fill out the fields first" : formData.id ? "Update" : "Submit"}
+            </button>
 
             <button type="reset" onClick={() => setFormData(defaultFormObj)}>
               Reset
@@ -304,14 +348,14 @@ export default function ReservationForm({
             <label>
               How many {formData.activityType == "AIRHOCKEY" ? "tables" : "lanes"}
               <select name="amount" id="" onChange={handleInputChange} disabled={!formData.startTime || !formData.activityType || !formData.date || !formData.duration}>
-                {generateLanes().map((option) => option)}
+                {generateAmountOptions().map((option) => option)}
               </select>
             </label>
           )}
           {/* {formData.activityType && formData.startTime && formData.duration && formData.date && (
           )} */}
-          <button type="button" onClick={handleAddActivity} disabled={!allowedToAdd()} className="test">
-            {allowedToAdd() ? "Add activity " : "Fill out all the fields first"}
+          <button type="button" onClick={handleAddActivity} disabled={!activityAllowed()} className="test">
+            {activityAllowed() ? "Add activity " : "Fill out all the fields first"}
           </button>
         </form>
 

@@ -73,6 +73,7 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
 .reservation-form button[type="button"]:disabled {
   background-color: #ccc;
   cursor: not-allowed;
@@ -81,6 +82,15 @@
 .reservation-form button[type="submit"]:hover {
   background-color: #218838;
 }
+.reservation-form button[type="submit"]:disabled {
+  background-color: grey;
+  color: white;
+  opacity: 0.5;
+  border: none;
+  border-radius: 4px;
+  cursor: not-allowed;
+}
+
 
 .reservation-form button[type="reset"],
 .button-remove {
