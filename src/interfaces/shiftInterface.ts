@@ -2,7 +2,7 @@ export interface Shift {
   id: number;
   shiftStart: string;
   shiftEnd: string;
-  DayOfWeek: DayOfWeek;
+  dayOfWeek: DayOfWeek;
   staff: Staff[];
 }
 
@@ -18,7 +18,7 @@ export interface Workers {
 export interface Staff {
   id: number;
   name: string;
-  StaffRoles: string;
+  role: string;
 }
 
 export enum DayOfWeek {

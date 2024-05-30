@@ -95,7 +95,7 @@ async function getMaintainables() {
 }
 
 async function getShifts() {
-  return fetch(`${API_URL}/shifts`).then(handleHttpErrors);
+  return fetch(`${API_URL}/shifts/all`).then(handleHttpErrors);
 }
 
 async function changeMaintenanceStatus(maintainable: Maintainable) {
