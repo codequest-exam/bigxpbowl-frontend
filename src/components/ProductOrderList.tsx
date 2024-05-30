@@ -46,7 +46,7 @@ const ProductOrderList: React.FC<ProductOrderListProps> = ({ orderList, onSubmit
                   className="clearItem-button"
                   onClick={() => removeFromOrder(product.id)}
                 >
-                  X
+                  -
                 </button>
               </li>
             );
