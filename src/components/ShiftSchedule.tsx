@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Shift, DayOfWeek, Staff } from "../interfaces/shiftInterface.ts";
 import { getShifts, getStaff, submitStaffChange } from "../services/apiFacade";
-import "../styling/schedule.css";
+import "../styling/shift.css";
 
 export default function ShiftSchedule() {
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -40,7 +40,7 @@ export default function ShiftSchedule() {
 
     const optionedShifts = s.map((shift) => {
       return (
-        <td key={shift.id}>
+        <td key={shift.id} className="option-container">
           {generateSelects(shift)} <button onClick={() => addOption(shift)}>Add shift spot</button>
         </td>
       );
@@ -53,10 +53,11 @@ export default function ShiftSchedule() {
     const g = shift.staff.map((staff) => {
       return (
         <div key={shift.staff.indexOf(staff).toString()}>
-          <select name={shift.staff.indexOf(staff).toString()} onChange={(e) => staffChanged(e, shift)} defaultValue={staff.name}>
+          <select name={shift.staff.indexOf(staff).toString()} onChange={(e) => staffChanged(e, shift)} defaultValue={staff.name} className="select-dropdown">
             {generateOptions(shift)}
           </select>
-          <button onClick={() => removeOption(shift, shift.staff.indexOf(staff))}>Remove</button>
+          
+          <img src="src/assets/red_x.png" alt="remove" style={{height:"10px", cursor:"pointer"}}  onClick={() => removeOption(shift, shift.staff.indexOf(staff))} />
         </div>
       );
     });
