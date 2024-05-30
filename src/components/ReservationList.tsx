@@ -1,19 +1,22 @@
-import { useEffect, useState} from "react";
+import { useEffect} from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
+import { getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function ReservationList({ setFormData, reservations, setReservations }: 
-  { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>}) {
-    const [currentPage, setCurrentPage] = useState(0);
+function ReservationList({ setFormData, reservations, setReservations, currentPage, setCurrentPage}: 
+  { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], 
+    setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>
+    currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  }) {
+    
 
       useEffect(() => {
         const fetchReservations = async () => {
           console.log("current page", currentPage);
           
-          const reservationsList = await getReservationsPaginated(currentPage);
+          const reservationsList = await getPaginatedReservations();
           console.log(reservationsList);
 
           setReservations(reservationsList);
@@ -22,6 +25,9 @@ function ReservationList({ setFormData, reservations, setReservations }:
         fetchReservations();
       }, [currentPage]);
 
+  async function getPaginatedReservations() {
+    return await getReservationsPaginated(currentPage);
+  }
   
 
   const handleEdit = async (id: number) => {
@@ -52,7 +58,7 @@ function ReservationList({ setFormData, reservations, setReservations }:
     console.log("Delete reservation with id: ", id);
     try {
       await deleteReservation(id);
-      setReservations(await getReservations());
+      setReservations(await getReservationsPaginated(currentPage));
       toast.success("Reservation deleted");
       console.log("Reservation deleted");
     } catch (error) {
@@ -66,9 +72,9 @@ function ReservationList({ setFormData, reservations, setReservations }:
       <ToastContainer />
       <h2 className="reservations-header">Reservations</h2>
       <div style={{display:"flex", flexDirection:"row", margin:"1vw", gap:"10px"}}>
-        <div>Current page: {currentPage+1}</div>
-        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
         <button disabled={currentPage==0} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <div>Current page: {currentPage+1}</div>
       </div>
       <table className="reservations-table">
         <thead>
