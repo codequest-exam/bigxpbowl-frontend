@@ -102,6 +102,10 @@ async function getShifts() {
   return fetch(`${API_URL}/shifts/all`).then(handleHttpErrors);
 }
 
+async function getStaff() {
+  return fetch(`${API_URL}/shifts/staff`).then(handleHttpErrors);
+}
+
 async function changeMaintenanceStatus(maintainable: Maintainable) {
   console.log("maintainable", maintainable);
 
@@ -164,4 +168,5 @@ export {
   getAvailableForDay,
   getReservationsPaginated,
   getShifts,
+  getStaff,
 };
