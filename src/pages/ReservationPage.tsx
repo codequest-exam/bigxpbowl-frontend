@@ -6,14 +6,14 @@ import ReservationList from "../components/ReservationList";
 
 
 
- const defaultFormObj = {
+ const defaultFormObj : ReservationFormData = {
   id: 0,
   name: "",
   phoneNumber: "",
   participants: 1,
   date: "",
   activityType: "",
-  startTime: "10:00",
+  startTime: "10:00:00",
   duration: "",
   amount: 1,
   activities: Array<ChosenActivityWithStringDates>(),

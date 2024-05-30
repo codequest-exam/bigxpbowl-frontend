@@ -1,24 +1,26 @@
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade.ts";
+import { getReservations, getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ReservationList({ setFormData, reservations, setReservations }: 
   { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>}) {
-  
+    const [currentPage, setCurrentPage] = useState(0);
 
       useEffect(() => {
         const fetchReservations = async () => {
-          const reservationsList = await getReservations();
+          console.log("current page", currentPage);
+          
+          const reservationsList = await getReservationsPaginated(currentPage);
           console.log(reservationsList);
 
           setReservations(reservationsList);
         };
 
         fetchReservations();
-      }, []);
+      }, [currentPage]);
 
   
 
@@ -63,6 +65,11 @@ function ReservationList({ setFormData, reservations, setReservations }:
     <div className="reservations-page">
       <ToastContainer />
       <h2 className="reservations-header">Reservations</h2>
+      <div style={{display:"flex", flexDirection:"row", margin:"1vw", gap:"10px"}}>
+        <div>Current page: {currentPage+1}</div>
+        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <button disabled={currentPage==0} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+      </div>
       <table className="reservations-table">
         <thead>
           <tr>
@@ -80,20 +87,15 @@ function ReservationList({ setFormData, reservations, setReservations }:
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
               <td>{reservation.name}</td>
-              <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
+              <td>{reservation.participants}</td>
               <td>{reservation.date}</td>
-              <td style={{whiteSpace:"pre"}}>
-                {reservation.activities.map((activity) => {
-                  return (
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-                    activity.substring(0, 1).toLocaleUpperCase() +
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-
-                    activity.substring(1).toLocaleLowerCase()
-                    
-                  );
-                }).join("\n")}
+              <td style={{ whiteSpace: "pre" }}>
+                {reservation.activities
+                  .map((activity) => {
+                    return activity.substring(0, 1).toLocaleUpperCase() + activity.substring(1).toLocaleLowerCase();
+                  })
+                  .join("\n")}
               </td>
               <td>
                 <button className="edit-button" onClick={() => handleEdit(reservation.id)}>

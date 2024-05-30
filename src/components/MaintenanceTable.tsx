@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Maintainable } from "../pages/MaintenancePage";
+
 import { changeMaintenanceStatus } from "../services/apiFacade";
 import "../styling/schedule.css";
+import { Maintainable } from "../interfaces/equipmentInterface";
 
 export default function MaintenanceTable({
   maintainables,
@@ -52,6 +53,9 @@ export default function MaintenanceTable({
             </button>
             <button onClick={() => handleActivityFilterChange("BOWLING")}>
               Bowling
+            </button>
+            <button onClick={() => handleActivityFilterChange("CHILDBOWLING")}>
+              Child bowling
             </button>
             <button onClick={() => handleActivityFilterChange("AIRHOCKEY")}>
               Air Hockey

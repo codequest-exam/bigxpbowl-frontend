@@ -6,8 +6,8 @@ import {
 } from "../services/apiFacade.ts";
 import {
   RecurringReservation,
-  Reservation,
   CompetitionDay,
+  ReservationListItem,
 } from "../interfaces/reservationInterface";
 import "./calendar.css";
 
@@ -18,7 +18,7 @@ interface Week {
 }
 
 export default function Calendar() {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [reservations, setReservations] = useState<ReservationListItem[]>([]);
   const [selectedActivity, setSelectedActivity] = useState("BOWLING");
   const [selectedWeek, setSelectedWeek] = useState<Week>();
   const [recurringReservations, setRecurringReservations] = useState<
