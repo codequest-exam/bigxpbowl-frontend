@@ -34,11 +34,11 @@
 
 .maintenance-filters button {
   background-color: #007bff;
+  color: white;
 }
 
 .maintenance-filters button:hover,
 .maintenance-filters select:hover {
-  transform: scale(1.05);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
 }
 

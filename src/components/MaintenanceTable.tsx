@@ -78,7 +78,7 @@ export default function MaintenanceTable({
               <tr>
                 <th>Type</th>
                 <th>Table / Lane number</th>
-                <th>Maintenance</th>
+                <th>Maintenance status</th>
                 <th>Change status</th>
               </tr>
             </thead>
@@ -96,7 +96,9 @@ export default function MaintenanceTable({
                   </td>
                   <td>{maintainable.laneNumber ?? maintainable.tableNumber}</td>
                   <td>
-                    {maintainable.maintenance ? "Under maintenance" : "All ok"}
+                    {maintainable.maintenance
+                      ? "Under maintenance"
+                      : "Available"}
                   </td>
                   <td>
                     <button
