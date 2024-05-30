@@ -29,6 +29,10 @@ export default function OrderProducts() {
     setOrderList(prevOrderList => [...prevOrderList, product]);
   };
 
+  const clearOrder = () => {
+    setOrderList([]);
+  }
+
   const removeFromOrder = (productId: number) => {
     setOrderList((prevOrderList) => {
       const productInstances = prevOrderList.filter(
@@ -51,7 +55,7 @@ export default function OrderProducts() {
   return (
     <>
       <div
-        style={{ display: "flex", margin: "3rem", padding: "2vw", gap: "28vw" }}
+        style={{ display: "flex", margin: "3rem", padding: "2vw", gap: "10vw" }}
       >
         <div>
           <ProductCardView
@@ -64,6 +68,7 @@ export default function OrderProducts() {
             orderList={orderList}
             onSubmit={handleProductOrderSubmit}
             removeFromOrder={removeFromOrder}
+            clearOrder={clearOrder}
           />
         </div>
       </div>
