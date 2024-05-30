@@ -36,10 +36,15 @@ export default function EquipmentOrderForm({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+
+    const parsedValue = parseInt(value);
+
+    if (!isNaN(parsedValue) && parsedValue >= 0) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: parsedValue,
+      }));
+    }
   };
 
   return (

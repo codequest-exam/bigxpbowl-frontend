@@ -10,6 +10,8 @@
 //     chosenActivities: string[];
 //   }
 
+
+
 export interface Reservation {
   id?: number;
   name: string;
@@ -42,7 +44,7 @@ export interface ReservationListItem {
   name: string;
   phoneNumber: string;
   participants: number;
-  activities: Array<ChosenActivity>;
+  activities: Array<"DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING">;
   date: string;
   startTime: string;
   endTime: string;
@@ -72,7 +74,7 @@ export interface ReservationFormData {
   name: string;
   phoneNumber: string;
   participants: number;
-  activityType: string;
+  activityType: "" |"DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING" ;
   amount: number;
   date: string;
   startTime: string;
@@ -83,4 +85,18 @@ export interface ReservationFormData {
 }
 export interface CompetitionDay {
   date: Date;
+}
+
+export interface AvailableForDay {
+  bowlingLanes: HourInfo[];
+  childLanes: HourInfo[];
+  airHockeyTables: HourInfo[];
+  diningTables: HourInfo[];
+
+  [key: string]: HourInfo[];
+}
+
+export interface HourInfo {
+  hour: string;
+  amountAvailable: number;
 }

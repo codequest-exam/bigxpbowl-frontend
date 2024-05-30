@@ -41,6 +41,9 @@ body,
 .calendar-table td {
   padding: 12px 15px;
   color: #333;
+  font-size: 1.2em; /* Increased font size */
+  font-weight: bold; /* Made the text bold */
+  text-align: center; /* Centered the text */
 }
 
 .calendar-table tbody tr:hover {
