@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import { Shift, DailyShifts, Workers, Staff, DayOfWeek } from "../interfaces/shiftInterface.ts";
-import { getShifts, getStaff } from "../services/apiFacade";
+import { Shift, DayOfWeek, Staff } from "../interfaces/shiftInterface.ts";
+import { getShifts, getStaff, submitStaffChange } from "../services/apiFacade";
 import "../styling/schedule.css";
-
-export interface Staff {
-  id: number;
-  name: string;
-  role: "MANAGER" | "EMPLOYEE" | "OPERATOR";
-
-}
 
 export default function ShiftSchedule() {
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -25,14 +18,14 @@ export default function ShiftSchedule() {
     fetchShifts();
   }, []);
 
-  useEffect(() => { 
+  useEffect(() => {
     async function fetchStaff() {
       const employeesList = await getStaff();
       console.log(employeesList);
 
       setStaff(employeesList);
     }
-    fetchStaff()
+    fetchStaff();
   }, []);
 
   function createDaysHeader() {
@@ -41,30 +34,91 @@ export default function ShiftSchedule() {
     });
   }
 
-  // function createEarlyShifts() {
-  //   const s = shifts.filter((shift) => shift.shiftStart == "10:00:00");
-
-  //   const optionedShifts = s.map((shift) => generateOptions(shift));
-  //   // console.log(optionedShifts);
-  //   return optionedShifts
-  // }
-
   function generateShifts(startTime: string) {
     const s = shifts.filter((shift) => shift.shiftStart == startTime);
-    const optionedShifts = s.map((shift) => <td>{generateSelects(shift)}</td>);
+    // console.log(shifts[0]);
+
+    const optionedShifts = s.map((shift) => {
+      return (
+        <td key={shift.id}>
+          {generateSelects(shift)} <button onClick={() => addOption(shift)}>Add shift spot</button>
+        </td>
+      );
+    });
     return optionedShifts;
   }
 
   function generateSelects(shift: Shift) {
-    const g = shift.staff.map((staff) => <select>{generateOptions(staff)}</select>);
-    // console.log(g);
+    // console.log("shift",shift);
+    const g = shift.staff.map((staff) => {
+      return (
+        <div key={shift.staff.indexOf(staff).toString()}>
+          <select name={shift.staff.indexOf(staff).toString()} onChange={(e) => staffChanged(e, shift)} defaultValue={staff.name}>
+            {generateOptions(shift)}
+          </select>
+          <button onClick={() => removeOption(shift, shift.staff.indexOf(staff))}>Remove</button>
+        </div>
+      );
+    });
     return g;
   }
 
-  function generateOptions(selectedStaff: Staff) {
-    return staff.map((employee) => {
-      return <option value={employee.name} selected={employee.id === selectedStaff.id}>{employee.name}</option>;
-    });
+  function generateOptions(shift: Shift) {
+    // selected={employee.id === selectedStaff?.id}
+    const temp = [<option key={"0"} value={""}>Select staff</option>];
+    temp.push(
+      ...staff.map((employee) => {
+        return (
+          <option
+            value={employee.name}
+            key={employee.id}
+            disabled={shift.staff.some((staff) => {
+              return staff.id === employee.id;
+            })}
+          >
+            {employee.name}
+          </option>
+        );
+      })
+    );
+    return temp;
+  }
+
+  function addOption(shift: Shift) {
+    shift.staff.push({ id: 0, name: "", role: "EMPLOYEE" });
+    setShifts([...shifts]);
+  }
+
+  async function removeOption(shift: Shift, index: number) {
+    shift.staff.splice(index, 1);
+    const updatedShift = await submitStaffChange(shift);
+    if (updatedShift.id) {
+      setShifts([...shifts]);
+    }
+  }
+
+  async function staffChanged(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, shift: Shift) {
+    console.log("staff changed", shift);
+    console.log("e", e.target.name, e.target.value);
+    // console.log(e.);
+
+    console.log("shift.staff", shift.staff[parseInt(e.target.name)]);
+    const previousStaff = shift.staff[parseInt(e.target.name)];
+
+    const newStaff = staff.find((staff) => staff.name === e.target.value);
+    if (previousStaff && newStaff) {
+      previousStaff.id = newStaff.id;
+      previousStaff.name = newStaff.name;
+      previousStaff.role = newStaff.role;
+      const updatedShift = await submitStaffChange(shift);
+      if (updatedShift.id) {
+        shifts[shifts.indexOf(shift)] = updatedShift;
+        setShifts([...shifts]);
+      }
+    }
+    // const newList = shift.staff.map((staff) => {
+    //   return { id: staff.id, name: staff.name, role: staff.role };
+    // });
   }
 
   return (

@@ -18,7 +18,7 @@ export interface Workers {
 export interface Staff {
   id: number;
   name: string;
-  role: string;
+  role: "MANAGER" | "EMPLOYEE" | "OPERATOR";
 }
 
 export enum DayOfWeek {
