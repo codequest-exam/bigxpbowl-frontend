@@ -179,7 +179,8 @@ export default function ReservationForm({
       return time.hour === formData.startTime;
     })?.amountAvailable;
     console.log("availableAtTime:" + availableAtTime);
-    
+
+  
 
     let optionalAvailable = availableAtTime;
     if (formData.duration === "2") {
@@ -188,12 +189,14 @@ export default function ReservationForm({
       })?.amountAvailable;
     }
     console.log("optionalAvailable:" + optionalAvailable);
-    
-    if (availableAtTime === undefined) {
-      return ErrorOptionArray();
+  if (!availableAtTime) {
+    return ErrorOptionArray();
+  }
+    // set available time to the lowest of the two
+    if (optionalAvailable != undefined) {
+      availableAtTime = optionalAvailable < availableAtTime ? optionalAvailable : availableAtTime;
     }
-    // set available time to the highest of the two
-    availableAtTime = optionalAvailable && optionalAvailable < availableAtTime ? optionalAvailable : availableAtTime;
+
     // make sure you can't reserve more than 4 lanes or tables
     availableAtTime = availableAtTime > 4 ? 4 : availableAtTime;
     console.log("availableAtTime available:" + availableAtTime);
@@ -202,7 +205,7 @@ export default function ReservationForm({
     }
     if (availableAtTime <= 0) {
       console.log("returning error");
-      
+
       return ErrorOptionArray(`No ${formData.activityType == "AIRHOCKEY" || formData.activityType == "DINING" ? "tables" : "lanes"} available at this time`);
     } else if (formData.amount == 0) {
       setFormData((prevFormData) => ({ ...prevFormData, amount: 1 }));
@@ -271,9 +274,8 @@ export default function ReservationForm({
     if (availableTimes[formData.activityType] === undefined) {
       return false;
     }
-      const availableNextHour = availableTimes[formData.activityType].find((e) => 1 + Number(e.hour.substring(0, 2)) + e.hour.substring(3) === formData.startTime);
+    const availableNextHour = availableTimes[formData.activityType].find((e) => 1 + Number(e.hour.substring(0, 2)) + e.hour.substring(3) === formData.startTime);
     if (availableNextHour === undefined) {
-
       return false;
     }
     return formData.startTime != "22:00:00" && availableNextHour?.amountAvailable <= 0;
