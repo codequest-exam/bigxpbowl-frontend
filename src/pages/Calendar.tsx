@@ -166,7 +166,8 @@ export default function Calendar() {
     const ratio = remainingSlots / maxSlots;
     const red = Math.min(255, Math.floor((1 - ratio) * 255));
     const green = Math.min(255, Math.floor(ratio * 255));
-    return `rgb(${red}, ${green}, 0)`;
+    const opacity = 0.85;
+    return `rgb(${red}, ${green}, 0, ${opacity})`;
   };
 
   const capitalizeFirstLetter = (string: string) => {
@@ -272,7 +273,7 @@ export default function Calendar() {
                 const isCompetitionDay = remainingSlots === "Competition";
 
                 const backgroundColor = isCompetitionDay
-                  ? "rgb(255, 0, 0)" // Red color for competition days
+                  ? "rgb(255, 0, 0, 0.85)" // Red color for competition days
                   : typeof remainingSlots === "number"
                   ? getColorForAvailability(
                       remainingSlots,
