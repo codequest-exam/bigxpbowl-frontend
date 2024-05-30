@@ -1,9 +1,9 @@
 .order-list {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 1em;
+  padding: 1.5em;
   margin-top: 2em;
-  width: 300px;
+  width: 400px;
   color: black;
 }
 
@@ -38,4 +38,34 @@
   margin-top: 1em;
   font-size: 1.2em;
   font-weight: bold;
+}
+
+.clearItem-button {
+  background-color: #ec3f33;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 0.9em;
+  margin-top: 1em;
+  margin-left: 0.5em;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.clearItem-button:hover {
+  background-color: #d63a2d;
+}
+
+.clear-button {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.4em 0.7em;
+  margin-top: 1em;
+  margin-left: 8em;
+  cursor: pointer;
+  font-size: 0.7em;
+}
+
+.clear-button:hover {
+  background-color: #ddd;
 }

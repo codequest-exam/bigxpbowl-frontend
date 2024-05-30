@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from 'react';
 import '../styling/productcardview.css';
 import { Product } from '../interfaces/productInterface';
-import { getProducts } from '../services/apiFacade';
 
-const ProductCardView: React.FC = () => {
-        const [products, setProducts] = useState<Product[]>([]);
 
-    useEffect(() => {
-      const fetchProducts = async () => {
-        const productList = await getProducts();
-        console.log(productList);
+interface ProductCardViewProps {
+    products: Product[];
+    onAddToOrder: (product: Product) => void;
+}
 
-        setProducts(productList);
-      };
 
-      fetchProducts();
-    }, []);
+const ProductCardView: React.FC<ProductCardViewProps> = ({ products, onAddToOrder }) => {
+
 
     return (
         <div className="product-list">
@@ -26,7 +20,7 @@ const ProductCardView: React.FC = () => {
                         <img src={product.imgURL} alt={product.name} className="product-image" />
                         <h3 className="product-name">{product.name}</h3>
                         <p className="product-price">Price: {product.price},- dkk</p>
-                        <button className="add-button">Add</button>
+                        <button className="add-button" onClick={() => onAddToOrder(product)}>Add to order</button>
                     </div>
                 ))}
             </div>

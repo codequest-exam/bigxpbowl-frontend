@@ -15,6 +15,12 @@ function EquipmentList({ equipment }: { equipment: Equipment[] }) {
   const handleSave = async (id: number) => {
     const equipmentItem = equipment.find((eq) => eq.id === id);
     if (equipmentItem) {
+      const newStock =
+        editStock[id] !== undefined ? editStock[id] : equipmentItem.stock;
+      if (newStock < 0) {
+        toast.error("Stock cannot be negative");
+        return;
+      }
       try {
         const updatedEquipment = { ...equipmentItem, stock: editStock[id] };
         await updateEquipment(id, updatedEquipment);

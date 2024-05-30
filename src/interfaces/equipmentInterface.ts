@@ -10,3 +10,16 @@ export interface EquipmentFormData {
 
   [key: string]: string | number | undefined;
 }
+
+
+export interface Maintainable {
+  laneNumber?: number;
+  tableNumber?: number;
+  maintenance: boolean;
+  childFriendly?: boolean;
+  activityType: "DINING"| "BOWLING"| "AIRHOCKEY" | "CHILDBOWLING"
+}
+
+// export enum ActivityType {
+//   "DINING", "BOWLING", "AIRHOCKEY" , "CHILDBOWLING"
+// }

@@ -1,15 +1,16 @@
-import { RecurringReservation, ReservationListItem, ReservationWithStringDates, CompetitionDay } from "../interfaces/reservationInterface.ts";
+import { RecurringReservation, ReservationListItem, ReservationWithStringDates, CompetitionDay, AvailableForDay } from "../interfaces/reservationInterface.ts";
 import { Product } from "../interfaces/productInterface.ts";
-import { Equipment } from "../interfaces/equipmentInterface.ts";
+import { Equipment, Maintainable } from "../interfaces/equipmentInterface.ts";
 import { API_URL } from "../settings.ts";
-import { Maintainable } from "../pages/MaintenancePage.tsx";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
-  return fetch(API_URL + "/reservations").then(handleHttpErrors);
-  // const data = await fetch(API_URL + "/reservations");
-  // const reservations = await data.json();
-  // console.log(reservations);
-  // return reservations;
+  return fetch(API_URL + "/reservations/all").then(handleHttpErrors);
+}
+
+async function getReservationsPaginated(page: number): Promise<Array<ReservationListItem>> {
+  console.log("current page", page);
+
+  return fetch(API_URL + "/reservations/all/" + page).then(handleHttpErrors);
 }
 
 async function getAvailableSlots(date: string, startTime: string, endTime: string, activityType: string): Promise<number> {
@@ -21,6 +22,12 @@ async function getAvailableSlots(date: string, startTime: string, endTime: strin
   const result = await fetch(URL, options).then(handleHttpErrors);
   console.log(result);
   return result;
+}
+
+async function getAvailableForDay(day: string): Promise<AvailableForDay> {
+  const res = await fetch(API_URL + "/activities/available/" + day).then(handleHttpErrors);
+  console.log(res);
+  return res;
 }
 
 async function getProducts(): Promise<Array<Product>> {
@@ -81,11 +88,8 @@ async function getMaintainables() {
   const res = await fetch(API_URL + "/maintenance/all").then(handleHttpErrors);
   const tempArray: Maintainable[] = [];
   console.log(res);
-
+  // Res is an object with 3 arrays of maintainables. We want to combine them into one array for easier handling
   for (const list in res) {
-    // tempArray.push(...list);
-    // console.log(list);
-    // console.log(res[list]);
     res[list].forEach((item: Maintainable) => {
       tempArray.push(item);
     });
@@ -101,7 +105,7 @@ async function getShifts() {
 async function changeMaintenanceStatus(maintainable: Maintainable) {
   console.log("maintainable", maintainable);
 
-  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
+  return fetch(`${API_URL}/maintenance/change/${maintainable.activityType == "CHILDBOWLING" ? "BOWLING" : maintainable.activityType}/${maintainable.laneNumber || maintainable.tableNumber}`).then(handleHttpErrors);
 }
 
 function makeOptions(method: string, body: object | null): RequestInit {
@@ -157,5 +161,7 @@ export {
   getAvailableSlots,
   getMaintainables,
   changeMaintenanceStatus,
+  getAvailableForDay,
+  getReservationsPaginated,
   getShifts,
 };

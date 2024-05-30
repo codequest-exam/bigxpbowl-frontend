@@ -10,7 +10,12 @@ interface ProductFormProps {
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, product }) => {
-  const defaultFormObj: Product = { id: undefined, name: "", price: 0, imgURL: ""};
+  const defaultFormObj: Product = {
+    id: undefined,
+    name: "",
+    price: 0,
+    imgURL: "",
+  };
 
   const [formData, setFormData] = useState<Product>(product || defaultFormObj);
 
@@ -38,6 +43,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, product }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === "price" && Number(value) < 0) {
+      return;
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,

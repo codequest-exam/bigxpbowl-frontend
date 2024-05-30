@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Maintainable } from "../pages/MaintenancePage";
 import { changeMaintenanceStatus } from "../services/apiFacade";
-import "../styling/schedule.css";
+import "../styling/maintenancelist.css";
+import { Maintainable } from "../interfaces/equipmentInterface";
 
 export default function MaintenanceTable({
   maintainables,
@@ -44,14 +44,17 @@ export default function MaintenanceTable({
   return (
     <>
       {maintainables ? (
-        <div style={{ padding: "1vw", margin: "1vw" }}>
-          <h1>Maintenance List</h1>
-          <div style={{ marginBottom: "1vw" }}>
+        <div className="maintenance-page">
+          <h1 className="maintenance-header">Maintenance List</h1>
+          <div className="maintenance-filters">
             <button onClick={() => handleActivityFilterChange("ALL")}>
               All
             </button>
             <button onClick={() => handleActivityFilterChange("BOWLING")}>
               Bowling
+            </button>
+            <button onClick={() => handleActivityFilterChange("CHILDBOWLING")}>
+              Child bowling
             </button>
             <button onClick={() => handleActivityFilterChange("AIRHOCKEY")}>
               Air Hockey
@@ -59,9 +62,7 @@ export default function MaintenanceTable({
             <button onClick={() => handleActivityFilterChange("DINING")}>
               Dining
             </button>
-            <label htmlFor="statusFilter" style={{ marginLeft: "1vw" }}>
-              Filter by Status:{" "}
-            </label>
+            <label htmlFor="statusFilter">Filter by Status:</label>
             <select
               id="statusFilter"
               value={statusFilter}
@@ -72,12 +73,12 @@ export default function MaintenanceTable({
               <option value="AVAILABLE">Available</option>
             </select>
           </div>
-          <table>
+          <table className="maintenance-table">
             <thead>
               <tr>
                 <th>Type</th>
                 <th>Table / Lane number</th>
-                <th>Maintenance</th>
+                <th>Maintenance status</th>
                 <th>Change status</th>
               </tr>
             </thead>
@@ -95,10 +96,15 @@ export default function MaintenanceTable({
                   </td>
                   <td>{maintainable.laneNumber ?? maintainable.tableNumber}</td>
                   <td>
-                    {maintainable.maintenance ? "Under maintenance" : "All ok"}
+                    {maintainable.maintenance
+                      ? "Under maintenance"
+                      : "Available"}
                   </td>
                   <td>
-                    <button onClick={() => handleButtonClicked(maintainable)}>
+                    <button
+                      className="save-button"
+                      onClick={() => handleButtonClicked(maintainable)}
+                    >
                       Change status
                     </button>
                   </td>
