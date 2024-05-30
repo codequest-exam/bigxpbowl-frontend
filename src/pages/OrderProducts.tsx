@@ -4,6 +4,7 @@ import ProductCardView from "../components/ProductCardView";
 import ProductOrderList from "../components/ProductOrderList";
 import { Product } from "../interfaces/productInterface";
 import { getProducts } from "../services/apiFacade";
+import { toast } from "react-toastify";
 
 
 export default function OrderProducts() {
@@ -21,6 +22,7 @@ export default function OrderProducts() {
 
   const handleProductOrderSubmit = () => {
     setOrderList([]);
+    toast.success("Order placed!");
   };
 
   const handleAddToOrder = (product: Product) => {
