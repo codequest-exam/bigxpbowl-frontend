@@ -9,7 +9,6 @@ interface ProductCardViewProps {
 
 
 const ProductCardView: React.FC<ProductCardViewProps> = ({ products, onAddToOrder }) => {
-console.log(products);
 
 
     return (
@@ -21,7 +20,7 @@ console.log(products);
                         <img src={product.imgURL} alt={product.name} className="product-image" />
                         <h3 className="product-name">{product.name}</h3>
                         <p className="product-price">Price: {product.price},- dkk</p>
-                        <button className="add-button" onClick={() => onAddToOrder(product)}>Add</button>
+                        <button className="add-button" onClick={() => onAddToOrder(product)}>Add to order</button>
                     </div>
                 ))}
             </div>

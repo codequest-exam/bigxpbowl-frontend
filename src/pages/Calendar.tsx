@@ -17,6 +17,13 @@ interface Week {
   endDate: Date;
 }
 
+const MAX_CAPACITIES = {
+  BOWLING: 20,
+  CHILDBOWLING: 4,
+  DINING: 20,
+  AIRHOCKEY: 6,
+};
+
 export default function Calendar() {
   const [reservations, setReservations] = useState<ReservationListItem[]>([]);
   const [selectedActivity, setSelectedActivity] = useState("BOWLING");
@@ -34,6 +41,7 @@ export default function Calendar() {
 
     fetchReservations();
   }, []);
+
   useEffect(() => {
     const fetchCompetitionDays = async () => {
       const competitionDaysList = await getCompetitionDays();
@@ -88,7 +96,7 @@ export default function Calendar() {
     activity: string,
     date: Date,
     timeSlot: string
-  ) => {
+  ): number | string => {
     const formattedDate = date.toISOString().split("T")[0];
 
     const isCompetitionDay = competitionDays.some(
@@ -142,7 +150,28 @@ export default function Calendar() {
       ).length;
     }
 
-    return oneTimeReservationsCount + recurringReservationsCount;
+    const totalReservationsCount =
+      oneTimeReservationsCount + recurringReservationsCount;
+    const remainingSlots =
+      MAX_CAPACITIES[activity as keyof typeof MAX_CAPACITIES] -
+      totalReservationsCount;
+
+    return remainingSlots >= 0 ? remainingSlots : 0;
+  };
+
+  const getColorForAvailability = (
+    remainingSlots: number,
+    maxSlots: number
+  ) => {
+    const ratio = remainingSlots / maxSlots;
+    const red = Math.min(255, Math.floor((1 - ratio) * 255));
+    const green = Math.min(255, Math.floor(ratio * 255));
+    const opacity = 0.85;
+    return `rgb(${red}, ${green}, 0, ${opacity})`;
+  };
+
+  const capitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
 
   const daysOfWeek = Array.from({ length: 7 }, (_, i) => {
@@ -163,6 +192,12 @@ export default function Calendar() {
         </button>
         <button
           className="calendar-btn"
+          onClick={() => setSelectedActivity("CHILDBOWLING")}
+        >
+          Child Bowling
+        </button>
+        <button
+          className="calendar-btn"
           onClick={() => setSelectedActivity("DINING")}
         >
           Dining
@@ -174,7 +209,9 @@ export default function Calendar() {
           Airhockey
         </button>
       </div>
-      <h2 style={{ textAlign: "center" }}>{selectedActivity}</h2>
+      <h2 style={{ textAlign: "center" }}>
+        Availability for {capitalizeFirstLetter(selectedActivity)}
+      </h2>
       <table className="calendar-table">
         <thead>
           <tr>
@@ -226,11 +263,38 @@ export default function Calendar() {
           ].map((timeSlot) => (
             <tr key={timeSlot}>
               <td className="td-border">{timeSlot}</td>
-              {daysOfWeek.map((date, index) => (
-                <td className="td-border" key={index}>
-                  {countReservations(selectedActivity, date, timeSlot)}
-                </td>
-              ))}
+              {daysOfWeek.map((date, index) => {
+                const remainingSlots = countReservations(
+                  selectedActivity,
+                  date,
+                  timeSlot
+                );
+
+                const isCompetitionDay = remainingSlots === "Competition";
+
+                const backgroundColor = isCompetitionDay
+                  ? "rgb(255, 0, 0, 0.85)" // Red color for competition days
+                  : typeof remainingSlots === "number"
+                  ? getColorForAvailability(
+                      remainingSlots,
+                      MAX_CAPACITIES[
+                        selectedActivity as keyof typeof MAX_CAPACITIES
+                      ]
+                    )
+                  : "white";
+
+                return (
+                  <td
+                    className="td-border"
+                    key={index}
+                    style={{
+                      backgroundColor: backgroundColor,
+                    }}
+                  >
+                    {remainingSlots}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

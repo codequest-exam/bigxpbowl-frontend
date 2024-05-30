@@ -1,8 +1,8 @@
 import { useEffect} from "react";
 import "../styling/reservations.css";
-import { getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
+import {  getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ReservationList({ setFormData, reservations, setReservations, currentPage, setCurrentPage}: 
@@ -19,8 +19,8 @@ function ReservationList({ setFormData, reservations, setReservations, currentPa
           const reservationsList = await getPaginatedReservations();
           console.log(reservationsList);
 
-          setReservations(reservationsList);
-        };
+      setReservations(reservationsList);
+    };
 
         fetchReservations();
       }, [currentPage]);
@@ -45,7 +45,8 @@ function ReservationList({ setFormData, reservations, setReservations, currentPa
       phoneNumber: reservation.phoneNumber,
       participants: reservation.participants,
       activities: reservation.activities,
-      date: reservation.activities.length > 0 ? reservation.activities[0].date : "",
+      date:
+        reservation.activities.length > 0 ? reservation.activities[0].date : "",
       duration: "",
       startTime: "",
       activityType: "",
@@ -69,7 +70,6 @@ function ReservationList({ setFormData, reservations, setReservations, currentPa
 
   return (
     <div className="reservations-page">
-      <ToastContainer />
       <h2 className="reservations-header">Reservations</h2>
       <div style={{display:"flex", flexDirection:"row", margin:"1vw", gap:"10px"}}>
         <button disabled={currentPage==0} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
@@ -93,21 +93,30 @@ function ReservationList({ setFormData, reservations, setReservations, currentPa
             <tr key={reservation.id}>
               <td>{reservation.id}</td>
               <td>{reservation.name}</td>
-              <td>{reservation.phoneNumber}</td>
               <td>{reservation.participants}</td>
+              <td>{reservation.phoneNumber}</td>
               <td>{reservation.date}</td>
               <td style={{ whiteSpace: "pre" }}>
                 {reservation.activities
                   .map((activity) => {
-                    return activity.substring(0, 1).toLocaleUpperCase() + activity.substring(1).toLocaleLowerCase();
+                    return (
+                      activity.substring(0, 1).toLocaleUpperCase() +
+                      activity.substring(1).toLocaleLowerCase()
+                    );
                   })
                   .join("\n")}
               </td>
               <td>
-                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(reservation.id)}
+                >
                   Edit
                 </button>
-                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(reservation.id)}
+                >
                   Delete
                 </button>
               </td>
