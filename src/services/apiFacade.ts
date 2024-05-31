@@ -2,6 +2,7 @@ import { RecurringReservation, ReservationListItem, ReservationWithStringDates, 
 import { Product } from "../interfaces/productInterface.ts";
 import { Equipment, Maintainable } from "../interfaces/equipmentInterface.ts";
 import { API_URL } from "../settings.ts";
+import { Shift } from "../interfaces/shiftInterface.ts";
 
 async function getReservations(): Promise<Array<ReservationListItem>> {
   return fetch(API_URL + "/reservations/all").then(handleHttpErrors);
@@ -102,6 +103,22 @@ async function getShifts() {
   return fetch(`${API_URL}/shifts/all`).then(handleHttpErrors);
 }
 
+async function getStaff() {
+  return fetch(`${API_URL}/shifts/staff`).then(handleHttpErrors);
+}
+
+async function submitShift(shift: Shift) {  
+  // shift = {... shift, shift.staff}
+  console.log(shift);
+  
+  const cleanedStaff = shift.staff.filter((staff) => staff.id > 0);
+  console.log("cleanedStaff", cleanedStaff);
+  
+  shift.staff = cleanedStaff;
+  const options = makeOptions("PUT", shift);
+  return fetch(`${API_URL}/shifts/${shift.id}`,options).then(handleHttpErrors);
+}
+
 async function changeMaintenanceStatus(maintainable: Maintainable) {
   console.log("maintainable", maintainable);
 
@@ -164,4 +181,6 @@ export {
   getAvailableForDay,
   getReservationsPaginated,
   getShifts,
+  getStaff,
+  submitShift as submitStaffChange,
 };

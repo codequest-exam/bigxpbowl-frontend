@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styling/reservationform.css";
 import { AvailableForDay, ChosenActivityWithStringDates, ReservationFormData, ReservationListItem, ReservationWithStringDates } from "../interfaces/reservationInterface";
 
-import { getReservations, submitReservation, getAvailableForDay } from "../services/apiFacade.ts";
+import {  submitReservation, getAvailableForDay, getReservationsPaginated } from "../services/apiFacade.ts";
 // import ErrorOption from "./ErrorOption.tsx";
 
 export default function ReservationForm({
@@ -10,11 +10,13 @@ export default function ReservationForm({
   formData,
   setReservations,
   defaultFormObj,
+  currentPage
 }: {
   setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
   formData: ReservationFormData;
   setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>;
   defaultFormObj: ReservationFormData;
+  currentPage: number;
 }) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   // const [notAllowedMessage, setNotAllowedMessage] = useState<string>("Fill out the fields first");
@@ -61,7 +63,7 @@ export default function ReservationForm({
 
     await submitReservation(newReservation);
     setFormData(defaultFormObj);
-    setReservations(await getReservations());
+    setReservations(await getReservationsPaginated(currentPage));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

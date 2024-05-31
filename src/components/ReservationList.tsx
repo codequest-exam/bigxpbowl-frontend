@@ -1,36 +1,34 @@
-import { useEffect } from "react";
+import { useEffect} from "react";
 import "../styling/reservations.css";
-import {
-  getReservations,
-  getSingleReservation,
-  deleteReservation,
-} from "../services/apiFacade.ts";
-import {
-  ReservationListItem,
-  ReservationFormData,
-} from "../interfaces/reservationInterface";
-import { toast } from "react-toastify";
+import {  getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
+import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function ReservationList({
-  setFormData,
-  reservations,
-  setReservations,
-}: {
-  setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>;
-  reservations: ReservationListItem[];
-  setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>;
-}) {
-  useEffect(() => {
-    const fetchReservations = async () => {
-      const reservationsList = await getReservations();
-      console.log(reservationsList);
+function ReservationList({ setFormData, reservations, setReservations, currentPage, setCurrentPage}: 
+  { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], 
+    setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>
+    currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  }) {
+    
+
+      useEffect(() => {
+        const fetchReservations = async () => {
+          console.log("current page", currentPage);
+          
+          const reservationsList = await getPaginatedReservations();
+          console.log(reservationsList);
 
       setReservations(reservationsList);
     };
 
-    fetchReservations();
-  }, []);
+        fetchReservations();
+      }, [currentPage]);
+
+  async function getPaginatedReservations() {
+    return await getReservationsPaginated(currentPage);
+  }
+  
 
   const handleEdit = async (id: number) => {
     console.log("Edit reservation with id: ", id);
@@ -61,7 +59,7 @@ function ReservationList({
     console.log("Delete reservation with id: ", id);
     try {
       await deleteReservation(id);
-      setReservations(await getReservations());
+      setReservations(await getReservationsPaginated(currentPage));
       toast.success("Reservation deleted");
       console.log("Reservation deleted");
     } catch (error) {
@@ -73,6 +71,11 @@ function ReservationList({
   return (
     <div className="reservations-page">
       <h2 className="reservations-header">Reservations</h2>
+      <div style={{display:"flex", flexDirection:"row", margin:"1vw", gap:"10px"}}>
+        <button disabled={currentPage==0} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <div>Current page: {currentPage+1}</div>
+      </div>
       <table className="reservations-table">
         <thead>
           <tr>
