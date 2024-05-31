@@ -29,16 +29,16 @@ export default function ShiftSchedule() {
   }, []);
 
   function createDaysHeader() {
-    return Object.values(DayOfWeek).map((day) => {
+    return Object.values(DayOfWeek).map(day => {
       return <th key={day}>{day}</th>;
     });
   }
 
   function generateShifts(startTime: string) {
-    const s = shifts.filter((shift) => shift.shiftStart == startTime);
+    const s = shifts.filter(shift => shift.shiftStart == startTime);
     // console.log(shifts[0]);
 
-    const optionedShifts = s.map((shift) => {
+    const optionedShifts = s.map(shift => {
       return (
         <td key={shift.id} className="option-container">
           {generateSelects(shift)} <button onClick={() => addOption(shift)}>Add shift spot</button>
@@ -50,14 +50,27 @@ export default function ShiftSchedule() {
 
   function generateSelects(shift: Shift) {
     // console.log("shift",shift);
-    const g = shift.staff.map((staff) => {
+    const g = shift.staff.map(staff => {
       return (
-        <div key={shift.staff.indexOf(staff).toString()}>
-          <select name={shift.staff.indexOf(staff).toString()} onChange={(e) => staffChanged(e, shift)} defaultValue={staff.name} className="select-dropdown">
+        <div
+          key={shift.staff.indexOf(staff).toString()}
+          style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-between", alignItems: "center" }}
+        >
+          <select
+            name={shift.staff.indexOf(staff).toString()}
+            onChange={e => staffChanged(e, shift)}
+            defaultValue={staff.name}
+            className="select-dropdown"
+          >
             {generateOptions(shift)}
           </select>
-          
-          <img src="src/assets/red_x.png" alt="remove" style={{height:"10px", cursor:"pointer"}}  onClick={() => removeOption(shift, shift.staff.indexOf(staff))} />
+
+          <img
+            src="src/assets/red_x.png"
+            alt="remove"
+            style={{ height: "10px", cursor: "pointer" }}
+            onClick={() => removeOption(shift, shift.staff.indexOf(staff))}
+          />
         </div>
       );
     });
@@ -66,14 +79,18 @@ export default function ShiftSchedule() {
 
   function generateOptions(shift: Shift) {
     // selected={employee.id === selectedStaff?.id}
-    const temp = [<option key={"0"} value={""}>Select staff</option>];
+    const temp = [
+      <option key={"0"} value={""}>
+        Select staff
+      </option>,
+    ];
     temp.push(
-      ...staff.map((employee) => {
+      ...staff.map(employee => {
         return (
           <option
             value={employee.name}
             key={employee.id}
-            disabled={shift.staff.some((staff) => {
+            disabled={shift.staff.some(staff => {
               return staff.id === employee.id;
             })}
           >
@@ -86,8 +103,10 @@ export default function ShiftSchedule() {
   }
 
   function addOption(shift: Shift) {
-    shift.staff.push({ id: 0, name: "", role: "EMPLOYEE" });
-    setShifts([...shifts]);
+    if (!shift.staff.some(staff => staff.id === 0)) {
+      shift.staff.push({ id: 0, name: "", role: "EMPLOYEE" });
+      setShifts([...shifts]);
+    }
   }
 
   async function removeOption(shift: Shift, index: number) {
@@ -106,7 +125,7 @@ export default function ShiftSchedule() {
     console.log("shift.staff", shift.staff[parseInt(e.target.name)]);
     const previousStaff = shift.staff[parseInt(e.target.name)];
 
-    const newStaff = staff.find((staff) => staff.name === e.target.value);
+    const newStaff = staff.find(staff => staff.name === e.target.value);
     if (previousStaff && newStaff) {
       previousStaff.id = newStaff.id;
       previousStaff.name = newStaff.name;
