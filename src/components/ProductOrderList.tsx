@@ -5,7 +5,7 @@ import { Product } from "../interfaces/productInterface";
 interface ProductOrderListProps {
   orderList: Product[];
   onSubmit: () => void;
-  removeFromOrder: (productId: number) => void;
+  removeFromOrder: (productId: number | undefined) => void;
   clearOrder: () => void;
 }
 

@@ -33,7 +33,8 @@ export default function OrderProducts() {
     setOrderList([]);
   }
 
-  const removeFromOrder = (productId: number) => {
+  const removeFromOrder = (productId: number | undefined) => {
+
     setOrderList((prevOrderList) => {
       const productInstances = prevOrderList.filter(
         (product) => product.id === productId
