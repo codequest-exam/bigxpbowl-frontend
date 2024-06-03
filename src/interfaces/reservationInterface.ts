@@ -10,6 +10,8 @@
 //     chosenActivities: string[];
 //   }
 
+
+
 export interface Reservation {
   id?: number;
   name: string;
@@ -42,22 +44,24 @@ export interface ReservationListItem {
   name: string;
   phoneNumber: string;
   participants: number;
-  activities: Array<ChosenActivity>;
+  activities: Array<"DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING">;
   date: string;
   startTime: string;
   endTime: string;
 }
 
 export interface ReservationWithStringDates {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
   activities: Array<ChosenActivityWithStringDates>;
+  
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }
 
 export interface ChosenActivityWithStringDates {
-  id: number;
+  id?: number;
   amountBooked: number;
   activityType: string;
   date: string;
@@ -66,16 +70,33 @@ export interface ChosenActivityWithStringDates {
 }
 
 export interface ReservationFormData {
-  id: number;
+  id?: number;
   name: string;
   phoneNumber: string;
   participants: number;
-  activityType: string;
+  activityType: "" |"DINING" | "BOWLING" | "AIRHOCKEY" | "CHILDBOWLING" ;
+  amount: number;
   date: string;
   startTime: string;
   duration: string;
   activities: Array<ChosenActivityWithStringDates>;
+
+  [key: string]: string | number | Date | Array<ChosenActivityWithStringDates> | undefined;
 }
 export interface CompetitionDay {
   date: Date;
+}
+
+export interface AvailableForDay {
+  bowlingLanes: HourInfo[];
+  childLanes: HourInfo[];
+  airHockeyTables: HourInfo[];
+  diningTables: HourInfo[];
+
+  [key: string]: HourInfo[];
+}
+
+export interface HourInfo {
+  hour: string;
+  amountAvailable: number;
 }

@@ -1,0 +1,71 @@
+.order-list {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1.5em;
+  margin-top: 2em;
+  width: 400px;
+  color: black;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 0.5em 0;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item-name {
+  flex-grow: 1;
+}
+
+.order-item-quantity {
+  margin-right: 1em;
+}
+
+.order-item-price {
+  font-weight: bold;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.clearItem-button {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 50%; /* Make the button round */
+  padding: 0.4em 0.8em;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.clearItem-button:hover {
+  background-color: #dc3545;
+}
+
+.clear-button {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.4em 0.7em;
+  margin-top: 1em;
+  margin-left: 8em;
+  cursor: pointer;
+  font-size: 0.7em;
+}
+
+.clear-button:hover {
+  background-color: #ddd;
+}

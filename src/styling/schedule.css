@@ -1,0 +1,54 @@
+.schedule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.schedule td {
+  padding: 1.5vw;
+  border: 1px solid #000;
+}
+
+.schedule th {
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.schedule .worker-select {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.worker-select select {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.worker-select button {
+  margin-left: 5px;
+  background-color: #ff4b5c;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.worker-select button:hover {
+  background-color: #e04450;
+}
+
+.add-worker-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.add-worker-button:hover {
+  background-color: #45a049;
+}

@@ -1,0 +1,47 @@
+/* .schedule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+table{
+  margin-top: 10%;
+  width: 90%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 1.5vw;
+  border: 1px solid #000;
+}
+
+ th {
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+worker-select {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+select {
+  margin: 0.5em;
+  padding: 5px;
+}
+
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}

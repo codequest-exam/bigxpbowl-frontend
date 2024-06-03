@@ -1,23 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import "../styling/reservations.css";
-import { getReservations, getSingleReservation, deleteReservation } from "../services/apiFacade";
+import {  getSingleReservation, deleteReservation, getReservationsPaginated } from "../services/apiFacade.ts";
 import { ReservationListItem, ReservationFormData } from "../interfaces/reservationInterface";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>> }) {
-  const [reservations, setReservations] = useState<ReservationListItem[]>([]);
+function ReservationList({ setFormData, reservations, setReservations, currentPage, setCurrentPage}: 
+  { setFormData: React.Dispatch<React.SetStateAction<ReservationFormData>>, reservations: ReservationListItem[], 
+    setReservations: React.Dispatch<React.SetStateAction<ReservationListItem[]>>
+    currentPage: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  }) {
+    
 
-  useEffect(() => {
-    const fetchReservations = async () => {
-      const reservationsList = await getReservations();
-      console.log(reservationsList);
+      useEffect(() => {
+        const fetchReservations = async () => {
+          console.log("current page", currentPage);
+          
+          const reservationsList = await getPaginatedReservations();
+          console.log(reservationsList);
 
       setReservations(reservationsList);
     };
 
-    fetchReservations();
-  }, []);
+        fetchReservations();
+      }, [currentPage]);
+
+  async function getPaginatedReservations() {
+    return await getReservationsPaginated(currentPage);
+  }
+  
 
   const handleEdit = async (id: number) => {
     console.log("Edit reservation with id: ", id);
@@ -25,19 +36,22 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     // Handle edit logic here
 
     const reservation = await getSingleReservation(id);
-    console.log(reservation);
+    console.log("single reservation", reservation);
 
-    setFormData({
+    setFormData(() => ({
+      // ... prev,
       id: reservation.id,
       name: reservation.name,
       phoneNumber: reservation.phoneNumber,
       participants: reservation.participants,
       activities: reservation.activities,
-      date: reservation.activities[0].date,
-      startTime: "",
+      date:
+        reservation.activities.length > 0 ? reservation.activities[0].date : "",
       duration: "",
+      startTime: "",
       activityType: "",
-    });
+      amount: 1,
+    }));
     // onEdit(reservation);
   };
 
@@ -45,7 +59,7 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
     console.log("Delete reservation with id: ", id);
     try {
       await deleteReservation(id);
-      setReservations(await getReservations());
+      setReservations(await getReservationsPaginated(currentPage));
       toast.success("Reservation deleted");
       console.log("Reservation deleted");
     } catch (error) {
@@ -56,8 +70,12 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
 
   return (
     <div className="reservations-page">
-      <ToastContainer />
       <h2 className="reservations-header">Reservations</h2>
+      <div style={{display:"flex", flexDirection:"row", margin:"1vw", gap:"10px"}}>
+        <button disabled={currentPage==0} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+        <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <div>Current page: {currentPage+1}</div>
+      </div>
       <table className="reservations-table">
         <thead>
           <tr>
@@ -78,23 +96,27 @@ function ReservationList({ setFormData }: { setFormData: React.Dispatch<React.Se
               <td>{reservation.participants}</td>
               <td>{reservation.phoneNumber}</td>
               <td>{reservation.date}</td>
-              <td>
-                {reservation.activities.map((activity) => {
-                  return (
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-                    activity.substring(0, 1) +
-                    //@ts-expect-error - it is not possible to assign a string to a ChosenActivity
-
-                    activity.substring(1).toLocaleLowerCase() +
-                    "\n"
-                  );
-                })}
+              <td style={{ whiteSpace: "pre" }}>
+                {reservation.activities
+                  .map((activity) => {
+                    return (
+                      activity.substring(0, 1).toLocaleUpperCase() +
+                      activity.substring(1).toLocaleLowerCase()
+                    );
+                  })
+                  .join("\n")}
               </td>
               <td>
-                <button className="edit-button" onClick={() => handleEdit(reservation.id)}>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEdit(reservation.id)}
+                >
                   Edit
                 </button>
-                <button className="delete-button" onClick={() => handleDelete(reservation.id)}>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(reservation.id)}
+                >
                   Delete
                 </button>
               </td>
