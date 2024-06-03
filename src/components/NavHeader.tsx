@@ -17,7 +17,7 @@ export default function NavHeader() {
             <NavLink to="/about">About us</NavLink>
             {(role === "admin" || role === "employee") && <NavLink to="/reservations">Reservations</NavLink>}
             {(role === "admin" || role === "employee") && <NavLink to="/calendar">Calendar</NavLink>}
-            {(role === "admin" || role === "employee") && <NavLink to="/orderproducts">Order Products</NavLink>}
+            {(role === "admin" || role === "employee") && <NavLink to="/orderproducts">Order Beverages</NavLink>}
             {(role === "admin" || role === "operator") && <NavLink to="/equipment">Equipment</NavLink>}
             {(role === "admin" || role === "operator") && <NavLink to="/maintenance">Maintenance</NavLink>}
             {role === "admin" && <NavLink to="/products">Manage Products</NavLink>}
