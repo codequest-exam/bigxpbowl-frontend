@@ -41,7 +41,7 @@ export default function ShiftSchedule() {
     const optionedShifts = s.map(shift => {
       return (
         <td key={shift.id} className="option-container">
-          {generateSelects(shift)} <button onClick={() => addOption(shift)}>Add shift spot</button>
+          {generateSelects(shift)} <button className="add-shift-button" onClick={() => addOption(shift)}>Add shift spot</button>
         </td>
       );
     });
@@ -59,7 +59,7 @@ export default function ShiftSchedule() {
           <select
             name={shift.staff.indexOf(staff).toString()}
             onChange={e => staffChanged(e, shift)}
-            defaultValue={staff.name}
+            value={staff.name}
             className="select-dropdown"
           >
             {generateOptions(shift)}
@@ -110,10 +110,20 @@ export default function ShiftSchedule() {
   }
 
   async function removeOption(shift: Shift, index: number) {
-    shift.staff.splice(index, 1);
+    const removed = shift.staff.filter((staff, i) => i !== index);
+    console.log("removed", removed);
+    
+    shift.staff = removed;
+    console.log("updated shift", shift);
+    
     const updatedShift = await submitStaffChange(shift);
     if (updatedShift.id) {
-      setShifts([...shifts]);
+      console.log("removed: ", updatedShift);
+      // shifts[shifts.indexOf(shift)] = updatedShift;
+      const newShifts = shifts.map(s => s.id === shift.id ? updatedShift : s);
+      console.log("shifts", shifts);
+      
+      setShifts(newShifts);
     }
   }
 
@@ -133,6 +143,8 @@ export default function ShiftSchedule() {
       const updatedShift = await submitStaffChange(shift);
       if (updatedShift.id) {
         shifts[shifts.indexOf(shift)] = updatedShift;
+        console.log("shifts", shifts);
+        
         setShifts([...shifts]);
       }
     }

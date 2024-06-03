@@ -7,6 +7,7 @@ export default function About() {
       <div className="about-header">
         <h2 className="about-title">About Big XP Bowl</h2>
         <img
+          // src="/bowling.jpg"
           src={bowlingHeaderImage}
           className="about-image"
           alt="Bowling Alley"

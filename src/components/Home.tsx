@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <video
-        src="src/assets/start-video.mp4" // replace with your video path
+        src="/start-video.mp4" // replace with your video path
         autoPlay
         muted
         loop

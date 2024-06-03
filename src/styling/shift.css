@@ -32,7 +32,7 @@ select {
 }
 
 
-button {
+.add-shift-button {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -42,6 +42,6 @@ button {
   margin-top: 5px;
 }
 
-button:hover {
+.add-shift-button:hover {
   background-color: #45a049;
 }
